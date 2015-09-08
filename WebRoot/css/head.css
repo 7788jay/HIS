@@ -1,0 +1,62 @@
+@CHARSET "UTF-8";
+#user{
+	width: 100%;
+	height: 30px;
+	
+}
+#user span{
+	float: right;
+	margin-right: 25px;
+}
+.head_ul{
+	background-color: #4D95DB;
+	height:50px;
+	padding:0px;
+	margin-bottom: 20px;
+}
+.head_ul ul{
+	float:left;
+	list-style:none; /* 去掉ul前面的符号 */
+}
+.head_ul ul li{
+	float:left;
+	margin-left:20px;
+}
+.head_ul ul li a{
+	color:#ffffff;
+	font-weight: bold;
+	font-size: 25px;
+	text-decoration: none;
+	
+}
+#ul_xiala{
+	display:none;
+	background-color: #4D95DB;
+	z-index:999;
+	margin-top:0px;
+	position:absolute;
+}
+#ul_xiala li{
+	float:none;
+	margin-left:0px;
+}
+.li_xiala{
+	margin-top: 10px;
+	
+}
+
+
+
+#manager_left{
+	position: relative;
+	width: 20%;
+	height: 500px;
+	float:left;
+}
+#manager_right{
+	margin-left:4%;
+	width: 75%;
+	height: 500px;
+	background-color: #CDCDCD;
+	float:left;
+}

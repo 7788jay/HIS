@@ -1,0 +1,78 @@
+@CHARSET "UTF-8";
+.privilege{
+	margin-left: 5%;
+	margin-top: 20px;
+}
+.privilege a{
+	font-size:18px;
+	line-height:50px;
+	text-align:center;
+	color:white;
+	width:100px;
+	height:50px;
+	background-color:#14649b;
+	display:block;
+}
+#add_privilege{
+	margin-left: 5%;
+	margin-top: 5px;
+	width:60%;
+	height: 250px;
+	border: 1px gray solid;
+	display: none;
+}
+/*添加*/
+#p_content{
+
+}
+.p_input{
+	width:260px;
+	height:20px;
+	font-size:15px;
+	margin-left:5%;
+	margin-top:20px;
+}
+.p_submit{
+	width:60px;
+	height:20px;
+	font-size:15px;
+	margin-left:11%;
+	margin-top:20px;
+}
+.p_text{
+	width:500px;
+	height:50px;
+	font-size:15px;
+	margin-left:5%;
+	margin-top:20px;
+}
+/*显示*/
+.table01{ 
+	border-collapse:collapse;
+	border-top: 0px;
+	border-right: 0px;
+	border-bottom: 1px #689AC8 solid;
+	border-left: 0px;
+}
+.td_top{
+	background-image: url(../images/bg.gif);
+	color:#FFFFFF;
+	padding: 6px;
+	height:23px;
+	font-size:18px;
+	border-collapse:collapse;
+	border-top: 1px #98ACC3 solid;
+	border-right: 0px solid;
+	border-bottom: 1px #5088BA solid;
+	border-left: 0px solid;
+}
+.td_01{
+    background-color:#F7FBFF;
+	color:#000000;
+	padding: 5px;
+	border-collapse:collapse;
+	border-top: 0px solid;
+	border-right: 0px solid;
+	border-bottom: 1px #B3CFE8 solid;
+	border-left: 0px solid;
+}

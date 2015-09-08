@@ -1,0 +1,31 @@
+@CHARSET "UTF-8";
+
+#login{
+	position:absolute;
+	width: 600px;
+	height: 350px;
+	left:50%;
+	top:50%;
+	margin-left:-300px;
+	margin-top:-170px;
+	background-color: #5AA5F5;
+	
+}
+#login_title{
+	width: 600px;
+	height: 70px;
+	text-align: center;
+	font-weight:bold;
+	font-size: 25px;
+	line-height: 70px;
+}
+.login_content{
+	margin-top: 20px;
+}
+.login_l{
+	margin-left:200px;
+	font-size:18px;
+	width: 250px;
+	height: 50px;
+	line-height: 50px;
+}
