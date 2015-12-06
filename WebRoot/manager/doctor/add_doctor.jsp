@@ -18,7 +18,15 @@
 <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="js/jquery-1.3.2.js"></script>
 <script type="text/javascript" src="js/doctor.js"></script>
+<style type="text/css" >
+    .addline{
+        width: 100%;
+        height: 30px;
+        line-height: 30px;
+        margin-top: 5px;;
+    }
 
+</style>
 
 </head>
 
@@ -28,7 +36,8 @@
 	<div style="clear: both"></div>
 	<%@include file="/public/doctor/add_left.jsp" %>
 	<div id="manager_right">
-		<form action="<%=basePath%>servlet/DoctorServlet?method=one_add" method="post">
+		<form id="dform" method="post">
+            <div class="addline">
 			科室分类:<select onchange="listcategory(this.value)">
 				<c:forEach var="dept_c" items="${categories }">
 				<option value="${dept_c.depet_category_id }">${dept_c.name }</option>
@@ -39,16 +48,17 @@
 				<option value="${dept.dept_id }">${dept.name }</option>
 				</c:forEach>
 			</select>
-			<br/>
-			username:<input type="text" name="username"><br/>
-			password:<input type="password" name="password"><br/>
-			职称:<select name="pro">
+            </div>
+
+            <div class="addline">username:<input type="text" name="username"></div>
+            <div class="addline">password:<input type="password" name="password"></div>
+            <div class="addline">职称:<select name="pro">
 				<c:forEach var="pro" items="${pros }">
 				<option value="${pro.profession_id }">${pro.profession_name }</option>
 				</c:forEach>
-			</select>
-			<br/>
-			<input type="submit" value="添加">
+			</select></div>
+
+            <div class="addline"><input type="button" onclick="one_add()" value="添加"></div>
 		</form>
 	</div>
 </body>

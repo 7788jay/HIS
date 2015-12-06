@@ -1,5 +1,5 @@
-function listprivilrge(id){
-	
+/*function listprivilrge(id){
+
 	layer.open({
 		type:2,
 		title:["查看权限",'font-size:20px;font-weight:bold;'],
@@ -10,7 +10,7 @@ function listprivilrge(id){
 };
 
 function updateInit(id){
-	
+
 	var index=layer.open({
 		type:2,
 		title:["修改角色",'font-size:20px;font-weight:bold;'],
@@ -20,7 +20,7 @@ function updateInit(id){
 	});
 };
 function UpdateRoleDetail(){
-	
+
 	$.post("servlet/RoleServlet?method=UpdateRoleDetail",$("#p_form").serialize(),function(data) {
         data = eval("(" + data + ")");
         layer.msg(data.message, {
@@ -34,9 +34,9 @@ function UpdateRoleDetail(){
 
         });
     });
-}
+}*/
 function one_add(){
-    $.post("/HIS/servlet/RoleServlet?method=add",$("#pform").serialize(),
+    $.post("/HIS/servlet/PrivilegeServlet?method=add",$("#pform").serialize(),
         function(data){
             data=eval("("+data+")");
             alert(data.message);

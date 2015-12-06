@@ -48,4 +48,31 @@ public class DepartmentDao {
 		Department department =(Department) qr.query(sql,dept_id,new BeanHandler(Department.class));
 		return department;
 	}
+
+	/**
+	 * 更新
+	 * @param dept_id
+	 * @param name
+	 */
+	public void update(String dept_id, String name) throws SQLException {
+		QueryRunner qr=new QueryRunner(JdbcUtil.getDataSources());
+		String sql="update department set name = ? where dept_id = "+dept_id;
+		qr.update(sql,name);
+	}
+
+    /**
+     * 删除
+     * @param dept_id
+     */
+    public void del(String dept_id) throws SQLException {
+        QueryRunner qr=new QueryRunner(JdbcUtil.getDataSources());
+        String sql="delete from department where dept_id = "+dept_id;
+        qr.update(sql);
+    }
+
+    public void add(Department department) throws SQLException {
+        QueryRunner qr=new QueryRunner(JdbcUtil.getDataSources());
+        String sql="insert into department (dept_id,name,depet_category_id) values (?,?,?)";
+        qr.update(sql,new Object[]{department.getDept_id(),department.getName(),department.getDepet_category_id()});
+    }
 }

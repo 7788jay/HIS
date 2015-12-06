@@ -21,8 +21,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	<div id="login_title">登录</div>
     	<div class="login_content">
 	    	<div class="login_l">用户名:<input type="text" id="username" name="username"></div>
-	    	<div class="login_l">密 &nbsp;&nbsp;&nbsp;码:<input type="password" id="password" name="password"></div>
-	    	<div class="login_l">身 &nbsp;&nbsp;&nbsp;份:<select name="status" id="status">
+	    	<div class="login_l">密&nbsp;码:<input type="password" id="password" name="password"></div>
+	    	<div class="login_l">身&nbsp;份:<select name="status" id="status">
 	    		<option value="m">管理员</option>
 	    		<option value="d">医生</option>
 	    	</select></div>

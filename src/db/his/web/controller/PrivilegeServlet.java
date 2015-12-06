@@ -13,6 +13,8 @@ import db.his.domain.Privilege;
 import db.his.domain.PrivilegeType;
 import db.his.service.PrivilegeService;
 import db.his.util.WebUtils;
+import net.sf.json.JSONObject;
+
 /**
  * 权限管理
  * @author 林
@@ -34,20 +36,24 @@ public class PrivilegeServlet extends HttpServlet {
 	}
 	PrivilegeService pService=new PrivilegeService();//权限服务类
 	//增加权限
-	private void add(HttpServletRequest request, HttpServletResponse response) {
+	private void add(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String pname=request.getParameter("pname");
 		String rname=request.getParameter("rname");
 		String description=request.getParameter("description");
 		String ptype=request.getParameter("ptype");
-		
+
+        JSONObject json = new JSONObject();
 		Privilege privilege=new Privilege(WebUtils.makeId(), pname, description, ptype, rname);
 		
 		try {
 			pService.add(privilege);
-			response.sendRedirect("/HIS/servlet/PrivilegeServlet?method=get");
+			//response.sendRedirect("/HIS/servlet/PrivilegeServlet?method=get");
+            json.put("message","添加成功！");
 		} catch (Exception e) {
 			e.printStackTrace();
+            json.put("message", "添加失败！");
 		}
+        response.getWriter().write(json.toString());
 	}
 	//获取权限管理页面
 	private void get(HttpServletRequest request, HttpServletResponse response) {

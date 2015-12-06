@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import db.his.util.WebUtils;
 import net.sf.json.JSONObject;
 
 
@@ -25,6 +26,8 @@ public class DepartmentServlet extends HttpServlet {
 		String method=request.getParameter("method");
 		if("get".equals(method)){
 			get(request,response);
+		}if("add".equals(method)){
+			add(request, response);
 		}
 		if("getbyid".equals(method)){
 			getbyid(request, response);
@@ -35,9 +38,71 @@ public class DepartmentServlet extends HttpServlet {
 		if("UpdateInit".equals(method)){
 			UpdateInit(request, response);
 		}
-		//Todo
+		if("UpdateDept".equals(method)){
+			UpdateDept(request, response);
+		}
+        if("del".equals(method)){
+            del(request, response);
+        }
 	}
 
+    /**
+     * 添加
+     * @param request
+     * @param response
+     */
+    private void add(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String dept_id = WebUtils.makeId();
+        String name = request.getParameter("name");
+        String depet_category_id = request.getParameter("dcid");
+
+        Department department = new Department(dept_id,name,depet_category_id);
+
+        JSONObject json=new JSONObject();
+        try {
+            dService.add(department);
+            json.put("message", "增加成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            json.put("message", "增加失败");
+        }
+        response.getWriter().write(json.toString());
+    }
+
+    /**
+     * 删除
+     * @param request
+     * @param response
+     */
+    private void del(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String dept_id = request.getParameter("dept_id");
+
+        JSONObject json=new JSONObject();
+        try {
+            dService.del(dept_id);
+            json.put("message", "修改成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            json.put("message", "修改失败");
+        }
+        response.getWriter().write(json.toString());
+    }
+
+    //科室修改
+	private void UpdateDept(HttpServletRequest request,
+							HttpServletResponse response) throws IOException {
+		String dept_id = request.getParameter("dept_id");
+		String name = request.getParameter("dname");
+		JSONObject json=new JSONObject();
+		try {
+			dService.update(dept_id,name);
+			json.put("message", "修改成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			json.put("message", "修改失败");
+		}
+		response.getWriter().write(json.toString());
+	}
 	/**
 	 * 修改页面
 	 * @param request

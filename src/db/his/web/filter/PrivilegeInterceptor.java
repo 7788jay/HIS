@@ -51,7 +51,7 @@ public class PrivilegeInterceptor implements Filter{
 			//1，判断用户是否有该权限，有则放行
 			if (privileges_session != null) {
 				for (Privilege p : privileges_session) {
-					if (p.getResourcename() == uri) {
+					if (p.getResourcename().equals(uri)) {
 						chain.doFilter(request, response);
 					}
 				}

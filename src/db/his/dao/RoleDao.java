@@ -42,13 +42,15 @@ public class RoleDao {
 			statement = connection.prepareStatement(sql);
 			statement.setString(1, roleid);
 			statement.executeUpdate();
-			for (int i = 0; i < penum.length; i++) {
-				sql="insert into privilege_role(roleid,pid) value(?,?)";
-				statement=connection.prepareStatement(sql);
-				statement.setString(1, roleid);
-				statement.setString(2, penum[i]);
-				statement.executeUpdate();
-			}
+            if (penum!=null) {
+                for (int i = 0; i < penum.length; i++) {
+                    sql = "insert into privilege_role(roleid,pid) value(?,?)";
+                    statement = connection.prepareStatement(sql);
+                    statement.setString(1, roleid);
+                    statement.setString(2, penum[i]);
+                    statement.executeUpdate();
+                }
+            }
 			connection.commit();
 		} catch (Exception e) {
 			connection.rollback();
@@ -76,7 +78,7 @@ public class RoleDao {
 	}
 	/**
 	 * 更新角色信息
-	 * @param role
+	 * @param r
 	 * @return
 	 * @throws SQLException 
 	 */

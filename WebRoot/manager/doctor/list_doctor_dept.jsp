@@ -29,6 +29,18 @@
 	<div style="clear: both"></div>
 	<%@include file="/public/doctor/list_left.jsp" %>
 	<div id="manager_right">
+        <div style="height: 30px;margin-top: 15px;" align="left">
+            科室分类:<select onchange="listcategory(this.value)">
+            <c:forEach var="dept_c" items="${categories }">
+                <option value="${dept_c.depet_category_id }">${dept_c.name }</option>
+            </c:forEach>
+            </select>
+                科室:<select id="next" name="dept" onchange="listdoctor(this.value)">
+                <c:forEach var="dept" items="${departments }">
+                    <option value="${dept.dept_id }">${dept.name }</option>
+                </c:forEach>
+            </select>
+        </div>
 		<table width="100%" class="table01" border="0" cellspacing="0" cellpadding="0" align="center" style="text-align:center">
     		<tr>
     			<td class="td_top">医生姓名</td>
@@ -36,6 +48,7 @@
     			<td class="td_top">所属科室</td>
     			<td class="td_top">操作</td>
     		</tr>
+            <tbody id="dlist">
     		<c:forEach var="d" items="${doctors }">
 	    		<tr>
 	    			<td class="td_01">${d.name }</td>
@@ -49,10 +62,12 @@
 		    				<c:if test="${d.dept_id==dept.dept_id }">${dept.name }</c:if>
 	    				</c:forEach>
 					</td>
-	    			<td class="td_01"><a href="javascript:show('${d.doctor_id}')">修改</a>
+	    			<td class="td_01"><a href="${pageContext.request.contextPath }/servlet/OrdersServlet?method=select&order_id=${order.id}">修改</a>
+
 	    			</td>
 	    		</tr>
     		</c:forEach>
+            </tbody>
     	</table>
 	</div>
 </body>

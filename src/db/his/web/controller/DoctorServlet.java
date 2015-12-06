@@ -54,6 +54,12 @@ public class DoctorServlet extends HttpServlet {
 		if("getAllDoc".equals(method)){
 			getAllDoc(request,response);//获取所有医生
 			return;
+		}if("getAllDocByDeptInit".equals(method)){
+            getAllDocByDeptInit(request, response);//根据科室获取所有医生
+			return;
+		}if("getDoctorbyDeptid".equals(method)){
+            getDoctorbyDeptid(request, response);//根据科室获取所有医生
+			return;
 		}if("getAllDocForUpdate".equals(method)){
 			getAllDocForUpdate(request,response);//为角色授权获取所有医生
 			return;
@@ -75,14 +81,33 @@ public class DoctorServlet extends HttpServlet {
 			return;
 		}
 	}
-	/**
+
+    private void getDoctorbyDeptid(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            List<Department> departments=dService.getAllDepartment();
+            String dept_id = request.getParameter("dept_id");
+            //根据科室分类id获取医生
+            List<Doctor> doctors=doctorService.getAllDocByDeptId(dept_id);
+
+            List<Profession> professions=cService.getAllProfession();
+
+            request.setAttribute("doctors", doctors);
+            request.setAttribute("departments", departments);
+            request.setAttribute("professions", professions);
+            request.getRequestDispatcher("/manager/doctor/doctorbydept.jsp").forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
 	 * 导入
 	 * @param request
 	 * @param response
 	 * @throws FileNotFoundException 
 	 */
 	private void importExcel(HttpServletRequest request,
-			HttpServletResponse response) throws FileNotFoundException {
+			HttpServletResponse response) throws IOException {
 //		 String excelPath = request.getParameter("excelPath");  
 		String excelPath = doupload(request);
         //输入流  
@@ -98,7 +123,7 @@ public class DoctorServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
-//        response.
+        response.getWriter().write("<script>alert(\"导入成功!\");</script>");
 		
 	}
 	/**
@@ -177,26 +202,51 @@ public class DoctorServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
+	//根据科室获取所有医生
+	private void getAllDocByDeptInit(HttpServletRequest request,
+			HttpServletResponse response) {
+		try {
+            List<DepartCategory> categories=dService.getAllDepartCategory();
+            List<Department> departments=dService.getDepartmentById(categories.get(0).getDepet_category_id());
+            //根据科室分类id获取医生
+			List<Doctor> doctors=doctorService.getAllDocByDeptId(departments.get(0).getDept_id());
+
+			List<Profession> professions=cService.getAllProfession();
+
+            request.setAttribute("categories", categories);
+			request.setAttribute("doctors", doctors);
+			request.setAttribute("departments", departments);
+			request.setAttribute("professions", professions);
+			request.getRequestDispatcher("/manager/doctor/list_doctor_dept.jsp").forward(request, response);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	//单独添加一个医生
 	private void one_add(HttpServletRequest request,
-			HttpServletResponse response) {
+			HttpServletResponse response) throws IOException {
 		String dept=request.getParameter("dept");
 		String username=request.getParameter("username");
 		String password=request.getParameter("password");
 		String pro_id=request.getParameter("pro");
-		
+
+        JSONObject json = new JSONObject();
+
 		Doctor doctor=new Doctor(WebUtils.makeId(), dept, pro_id, username, password);
 		try {
 			doctorService.addDoctor(doctor);
+            json.put("message", "添加成功！");
 		} catch (SQLException e) {
 			e.printStackTrace();
+            json.put("message", "添加失败！");
 		}
+        response.getWriter().write(json.toString());
 	}
 	//获取科室及职称
 	private void getDep_Pro(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			List<DepartCategory> categories=dService.getAllDepartCategory();
-			List<Department> departments=dService.getDepartmentById("1");
+			List<Department> departments=dService.getDepartmentById(categories.get(0).getDepet_category_id());
 			List<Profession> professions=cService.getAllProfession();
 			request.setAttribute("pros", professions);
 			request.setAttribute("categories", categories);

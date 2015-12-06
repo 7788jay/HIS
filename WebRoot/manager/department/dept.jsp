@@ -44,7 +44,7 @@
 					</td>
 	    			<td class="td_01">${d.name }</td>
 	    			<td class="td_01"><a href="javascript:updateInit('${d.dept_id}')">修改</a>
-	    			<a href="${pageContext.request.contextPath }/servlet/OrdersServlet?method=select&order_id=${order.id}">删除</a>
+	    			<%--<a href="javascript:del('${d.dept_id}')">删除</a>--%>
 	    			</td>
 	    		</tr>
     		</c:forEach>
@@ -52,16 +52,16 @@
     	<div class="privilege"><a href="javascript:void(0)" onclick="addprivilege(this)">添加科室</a></div>
     	<div id="add_privilege">
     		<div id="p_content">
-    			<form action="${pageContext.request.contextPath }/servlet/RoleServlet?method=add" method="post">
+    			<form action="" id="dform" method="post">
 
-			    	<div class="p_input">科室分类:<select onchange="listcategory(this.value)">
+			    	<div class="p_input">科室分类:<select name="dcid" onchange="listcategory(this.value)">
 						<c:forEach var="dept_c" items="${categories }">
-							<option value="${dept_c.depet_category_id }">${dept_c.name }</option>
+							<option  value="${dept_c.depet_category_id }">${dept_c.name }</option>
 						</c:forEach>
 					</select></div>
-					<div class="p_input">科室名称：<input type="text" name="rname" /></div>
+					<div class="p_input">科室名称：<input type="text" name="name" /></div>
 
-			    	<div class="p_submit"><input type="submit" value="添加"/></div>
+			    	<div class="p_submit"><input type="button" value="添加" onclick="one_add()"/></div>
 		    	</form>
 		    </div>
     	</div>

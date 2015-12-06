@@ -23,7 +23,14 @@ public class Department {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	
-	
+
+    public Department() {
+        super();
+    }
+
+    public Department(String dept_id, String name, String depet_category_id) {
+        this.dept_id = dept_id;
+        this.name = name;
+        this.depet_category_id = depet_category_id;
+    }
 }

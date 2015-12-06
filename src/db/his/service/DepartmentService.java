@@ -36,4 +36,25 @@ public class DepartmentService {
 	public Department findDepartment(String dept_id) throws SQLException {
 		return departmentDao.findDepartment(dept_id);
 	}
+
+	/**
+	 * 更新科室信息
+	 * @param dept_id
+	 * @param name
+	 */
+	public void update(String dept_id, String name) throws SQLException {
+		departmentDao.update(dept_id, name);
+	}
+
+    /**
+     * 删除
+     * @param dept_id
+     */
+    public void del(String dept_id) throws SQLException {
+        departmentDao.del(dept_id);
+    }
+
+    public void add(Department department) throws SQLException {
+        departmentDao.add(department);
+    }
 }

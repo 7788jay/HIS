@@ -18,6 +18,17 @@
 <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="js/jquery-1.3.2.js"></script>
 <script type="text/javascript" src="js/doctor.js"></script>
+    <style type="text/css" >
+        .addline{
+            width: 100%;
+            height: 30px;
+            margin-left: 20px;
+            line-height: 30px;
+            margin-top: 5px;
+            text-align: left;
+        }
+
+    </style>
 <script type="text/javascript">
 //Excel文件导入到数据库中  
 function importEmp(){  
@@ -35,8 +46,8 @@ function importEmp(){
         }  
     }  
     //提交表单  
-    document.getElementById("empForm").action="<%=request.getContextPath()%>/servlet/DoctorServlet?method=importExcel";    
-    document.getElementById("empForm").submit();  
+    document.getElementById("empForm").action="<%=request.getContextPath()%>/servlet/DoctorServlet?method=importExcel";
+    document.getElementById("empForm").submit();
 }
 </script>
 
@@ -50,8 +61,9 @@ function importEmp(){
 	<div id="manager_right">
 		<form action="" id="empForm" method="post" enctype="multipart/form-data">
 			<div style="font-size:14px;margin-top: 40px;">
-			<input type="file" id="excelPath" name="excelPath" />
-			<input type="button" value="导入Excel" onclick="importEmp()" />
+                <div class="addline">1.请先下载模板，<a href="<%=request.getContextPath()%>/servlet/DoctorServlet?method=downExcel">---></a></div>
+                <div class="addline">2.选择导入文件(xls结尾) <input type="file" id="excelPath" name="excelPath" /></div>
+                <div class="addline"> <input type="button" value="导入Excel" onclick="importEmp()" /></div>
 			</div>
 		</form>
 	</div>

@@ -47,13 +47,15 @@ public class DoctorDao {
 			statement = connection.prepareStatement(sql);
 			statement.setString(1, docid);
 			statement.executeUpdate();
-			for (int i = 0; i < roleids.length; i++) {
-				sql="insert into role_outpatient_docter(outpatient_docter_id,roleid) value(?,?)";
-				statement=connection.prepareStatement(sql);
-				statement.setString(1, docid);
-				statement.setString(2, roleids[i]);
-				statement.executeUpdate();
-			}
+            if(roleids!=null) {
+                for (int i = 0; i < roleids.length; i++) {
+                    sql = "insert into role_outpatient_docter(outpatient_docter_id,roleid) value(?,?)";
+                    statement = connection.prepareStatement(sql);
+                    statement.setString(1, docid);
+                    statement.setString(2, roleids[i]);
+                    statement.executeUpdate();
+                }
+            }
 			connection.commit();
 		} catch (Exception e) {
 			connection.rollback();
@@ -77,4 +79,12 @@ public class DoctorDao {
 		Doctor doctor=(Doctor) qr.query(sql,new Object[]{doc.getName(),doc.getPassword()},new BeanHandler(Doctor.class));
 		return doctor;
 	}
+
+
+    public List<Doctor> getAllDocByDeptId(String dept_id) throws SQLException {
+        String sql="select * from outpatient_docter where dept_id = ?";
+        List<Doctor> list=(List<Doctor>) qr.query(sql,dept_id,new BeanListHandler(Doctor.class));
+        return list;
+
+    }
 }

@@ -42,7 +42,7 @@
 	    			<td class="td_01">${r.createtime }</td>
 	    			<td class="td_01">${r.description }</td>
 	    			<td class="td_01"><a href="javascript:updateInit('${r.roleid}')">修改</a>
-	    			<a href="${pageContext.request.contextPath }/servlet/OrdersServlet?method=select&order_id=${order.id}">删除</a>
+
 	    			</td>
 	    			<td class="td_01"><a href="javascript:listprivilrge('${r.roleid}')">查看权限</a>
 	    			<a href="${pageContext.request.contextPath }/servlet/RoleServlet?method=getUpdateRole&roleid=${r.roleid}">修改权限</a>
@@ -53,10 +53,10 @@
     	<div class="privilege"><a href="javascript:void(0)" onclick="addprivilege(this)">添加角色</a></div>
     	<div id="add_privilege">
     		<div id="p_content">
-    			<form action="${pageContext.request.contextPath }/servlet/RoleServlet?method=add" method="post">
+    			<form action="" method="post" id="pform">
 			    	<div class="p_input">角色名称：<input type="text" name="rname" /></div>
-			    	<div class="p_text">权限描述：<textarea name="description" cols="50" rows="3" ></textarea></div>
-			    	<div class="p_submit"><input type="submit" value="添加"/></div>
+			    	<div class="p_text">角色描述：<textarea name="description" cols="50" rows="3" ></textarea></div>
+			    	<div class="p_submit"><input type="button" value="添加" onclick="one_add()"/></div>
 		    	</form>
 		    </div>
     	</div>

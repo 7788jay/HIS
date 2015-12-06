@@ -18,7 +18,7 @@
 <script type="text/javascript" src="js/manager.js"></script>
 <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="js/jquery-1.3.2.js"></script>
-<script type="text/javascript" src="js/doctor.js"></script>
+<script type="text/javascript" src="js/privilege.js"></script>
 
 
 </head>
@@ -34,7 +34,7 @@
     			<td class="td_top">资源名称</td>
     			<td class="td_top">权限描述</td>
     			<td class="td_top">权限类型</td>
-    			<td class="td_top">操作</td>
+    			<%--<td class="td_top">操作</td>--%>
     		</tr>
     		<c:forEach var="p" items="${privileges }">
 	    		<tr>
@@ -42,16 +42,16 @@
 	    			<td class="td_01">${p.resourcename }</td>
 	    			<td class="td_01">${p.pdescription}</td>
 	    			<td class="td_01">${p.type_name }</td>
-	    			<td class="td_01"><a href="${pageContext.request.contextPath }/servlet/OrdersServlet?method=select&order_id=${order.id}">修改</a>
+	    			<%--<td class="td_01"><a href="${pageContext.request.contextPath }/servlet/OrdersServlet?method=select&order_id=${order.id}">修改</a>
 	    			<a href="${pageContext.request.contextPath }/servlet/OrdersServlet?method=select&order_id=${order.id}">修改</a>
-	    			</td>
+	    			</td>--%>
 	    		</tr>
     		</c:forEach>
     	</table>
     	<div class="privilege"><a href="javascript:void(0)" onclick="addprivilege(this)">添加权限</a></div>
     	<div id="add_privilege">
     		<div id="p_content">
-    			<form action="${pageContext.request.contextPath }/servlet/PrivilegeServlet?method=add" method="post">
+    			<form action="" id="pform" method="post">
 			    	<div class="p_input">权限名称：<input type="text" name="pname" /></div>
 			    	<div class="p_input">资源名称：<input type="text" name="rname" /></div>
 			    	<div class="p_text">权限描述：<textarea name="description" cols="50" rows="2" ></textarea></div>
@@ -62,7 +62,7 @@
 			    			</c:forEach>
 						</select>
 			    	</div>
-			    	<div class="p_submit"><input type="submit" value="添加"/></div>
+			    	<div class="p_submit"><input type="button" value="添加" onclick="one_add()"/></div>
 		    	</form>
 		    </div>
     	</div>

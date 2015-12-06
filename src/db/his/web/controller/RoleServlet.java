@@ -153,17 +153,20 @@ public class RoleServlet extends HttpServlet {
 	}
 	RoleService rService=new RoleService();
 	//添加角色
-	private void add(HttpServletRequest request, HttpServletResponse response) {
+	private void add(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String rname=request.getParameter("rname");
 		String description=request.getParameter("description");
-		
+		JSONObject json = new JSONObject();
 		Role role=new Role(WebUtils.makeId(), rname, description, new Date(),null);
 		
 		try {
 			rService.add(role);
+            json.put("message","添加成功！");
 		} catch (SQLException e) {
 			e.printStackTrace();
+            json.put("message","添加失败！");
 		}
+        response.getWriter().write(json.toString());
 	}
 	//获取所有角色
 	private void get(HttpServletRequest request, HttpServletResponse response) {

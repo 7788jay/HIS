@@ -34,4 +34,9 @@ public class DoctorService {
 	public List<DocRole> getDocRoles(String doctor_id) throws SQLException {
 		return doctorDao.getDocRoles(doctor_id);
 	}
+
+    public List<Doctor> getAllDocByDeptId(String dept_id) throws SQLException {
+        return doctorDao.getAllDocByDeptId(dept_id);
+
+    }
 }
