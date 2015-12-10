@@ -9,7 +9,7 @@
 				<div id="ul_xiala">
 					<div class="li_xiala"><a href="${pageContext.request.contextPath}/manager/doctor/doctor.jsp">医生管理</a></div>
 					<div class="li_xiala"><a href="#" target="body">护士管理</a></div>
-					<div class="li_xiala"><a href="#" target="body">病人管理</a></div>
+					<div class="li_xiala"><a href="${pageContext.request.contextPath}/manager/patient/add_patient.jsp">病人管理</a></div>
 				</div>
 			</li>
 			<li onmouseover="change(this)" onmouseout="change(this)">

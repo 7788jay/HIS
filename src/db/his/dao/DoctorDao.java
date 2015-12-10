@@ -18,26 +18,47 @@ import db.his.util.JdbcUtil;
 
 public class DoctorDao {
 	QueryRunner qr=new QueryRunner(JdbcUtil.getDataSources());
-	
-	//添加一个医生
+
+	/**
+	 * 添加一个医生
+	 * @param doc
+	 * @throws SQLException
+     */
 	public void addDoctor(Doctor doc) throws SQLException{
 		String sql="insert into outpatient_docter(doctor_id,name,password,dept_id,profession_id) values(?,?,?,?,?)";
 		Object params[]={doc.getDoctor_id(),doc.getName(),doc.getPassword(),doc.getDept_id(),doc.getProfession_id()};
 		qr.update(sql, params);
 	}
 
+	/**
+	 * 获取所有医生
+	 * @return
+	 * @throws SQLException
+     */
 	public List<Doctor> getAllDoc() throws SQLException {
 		String sql="select * from outpatient_docter";
 		List<Doctor> list=(List<Doctor>) qr.query(sql, new BeanListHandler(Doctor.class));
 		return list;
 	}
-	//根据id获取医生
+
+	/**
+	 * 根据id获取医生
+	 * @param doctor_id
+	 * @return
+	 * @throws SQLException
+     */
 	public Doctor findDoctorById(String doctor_id) throws SQLException {
 		String sql="select * from outpatient_docter where doctor_id=?";
 		Doctor doctor=(Doctor) qr.query(sql,doctor_id,new BeanHandler(Doctor.class));
 		return doctor;
 	}
-	//更新用户角色
+
+	/**
+	 * 更新用户角色
+	 * @param docid
+	 * @param roleids
+	 * @throws SQLException
+     */
 	public void update(String docid, String[] roleids) throws SQLException {
 		PreparedStatement statement=null;
 		Connection connection=JdbcUtil.getConnection();
@@ -62,7 +83,13 @@ public class DoctorDao {
 			e.printStackTrace();
 		}
 	}
-	//获取该用户的角色
+
+	/**
+	 * 获取该用户的角色
+	 * @param doctor_id
+	 * @return
+	 * @throws SQLException
+     */
 	public List<DocRole> getDocRoles(String doctor_id) throws SQLException {
 		String sql="select * from role_outpatient_docter where outpatient_docter_id=?";
 		List<DocRole> docRoles=(List<DocRole>) qr.query(sql,doctor_id,new BeanListHandler(DocRole.class));
