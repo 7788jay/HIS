@@ -21,27 +21,36 @@
 
     <context:annotation-config></context:annotation-config>
 
+    <!-- springmvc 注解驱动 -->
+    <!--<mvc:annotation-driven/>-->
+
     <mvc:default-servlet-handler/>
     <!-- Enables the Spring MVC @Controller programming model -->
-    <!--<mvc:annotation-driven>-->
-        <!--<mvc:message-converters>-->
-            <!--<ref bean="fastJsonHttpMessageConverter"/>-->
-        <!--</mvc:message-converters>-->
-    <!--</mvc:annotation-driven>-->
-
-    <!-- springmvc 注解驱动 -->
-    <mvc:annotation-driven/>
-    <!-- 扫描器 -->
-    <context:component-scan base-package="db.his"/>
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <ref bean="fastJsonHttpMessageConverter"/>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
 
     <!-- 启动Spring MVC的注解功能，完成请求和注解POJO的映射 -->
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter" >
         <property name="messageConverters">
             <list>
-                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"></bean>
+                <ref bean="fastJsonHttpMessageConverter" /><!-- json转换器 -->
             </list>
         </property>
     </bean>
+
+    <bean id="fastJsonHttpMessageConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+        <property name="supportedMediaTypes">
+            <list>
+                <value>application/json; charset=utf-8</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 扫描器 -->
+    <context:component-scan base-package="db.his"/>
 
 
     <!-- 配置视图解析器 -->
