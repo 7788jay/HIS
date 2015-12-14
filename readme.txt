@@ -33,3 +33,15 @@ create table role_outpatient_docter(
 );
 
 ++++++++用户角色++++
+
+
+++++++++挂号表++++++++
+CREATE TABLE schedule(
+  id INT AUTO_INCREMENT NOT NULL PRIMARY KEY ,
+  doctor_id VARCHAR(40) NOT NULL ,
+  time INT NOT NULL ,
+  week INT NOT NULL ,
+  sum INT NOT NULL ,
+  left_sum INT NOT NULL
+
+);

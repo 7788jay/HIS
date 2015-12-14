@@ -49,8 +49,10 @@
 		    				<c:if test="${d.dept_id==dept.dept_id }">${dept.name }</c:if>
 	    				</c:forEach>
 					</td>
-	    			<td class="td_01"><a href="javascript:show('${d.doctor_id}')">修改</a>
-	    			</td>
+	    			<td class="td_01">
+						<a href="javascript:show('${d.doctor_id}')">修改</a>
+						<a href="servlet/doctorSchedule/init/${d.doctor_id}">预约排班</a>
+					</td>
 	    		</tr>
     		</c:forEach>
     	</table>

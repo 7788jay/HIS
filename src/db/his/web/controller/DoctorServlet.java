@@ -1,38 +1,24 @@
 package db.his.web.controller;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.UUID;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-
-import net.sf.json.JSONObject;
-
-import db.his.domain.DepartCategory;
-import db.his.domain.Department;
-import db.his.domain.DocRole;
-import db.his.domain.Doctor;
-import db.his.domain.Profession;
-import db.his.domain.Role;
+import db.his.domain.*;
 import db.his.service.CommonService;
 import db.his.service.DepartmentService;
 import db.his.service.DoctorService;
 import db.his.service.RoleService;
 import db.his.util.ExcelPoiUtil;
 import db.his.util.WebUtils;
+import net.sf.json.JSONObject;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.sql.SQLException;
+import java.util.List;
 
 public class DoctorServlet extends HttpServlet {
 	DepartmentService dService=new DepartmentService();//科室服务层
@@ -44,11 +30,11 @@ public class DoctorServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String method=request.getParameter("method");
 		if("one_add".equals(method)){
-			one_add(request,response);
+			one_add(request,response);//添加一个医生
 			return;
 		}
 		if("getDep_Pro".equals(method)){
-			getDep_Pro(request,response);
+			getDep_Pro(request,response);//获取医生职称
 			return;
 		}
 		if("getAllDoc".equals(method)){

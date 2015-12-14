@@ -29,3 +29,36 @@
 	border-bottom: 1px #B3CFE8 solid;
 	border-left: 0px solid;
 }
+/**医生排班**/
+#role{
+	width: 100%;
+	background-color:#4D95DB;
+	height: 40px;
+	margin-bottom: 20px;
+	line-height: 40px;
+}
+#role_back{
+	margin-top:1px;
+	margin-left:5px;
+	width: 80px;
+	height:38px;
+	background-color:white;
+	float: left;
+	margin-right: 20px;
+}
+#role_back a{
+	text-align:center;
+	display: block;
+	width: 80px;
+	font-weight: bold;
+	font-size: 20px;
+}
+#role_name{
+	margin-left:10px;
+	color:white;
+	width: 250px;
+	float: left;
+}
+#role_name span{
+	color:red;
+}
