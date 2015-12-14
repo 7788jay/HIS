@@ -1,12 +1,13 @@
 package db.his.service;
 
 
-import java.sql.SQLException;
-import java.util.List;
-
 import db.his.dao.DoctorDao;
 import db.his.domain.DocRole;
 import db.his.domain.Doctor;
+import db.his.domain.dto.DoctorDTO;
+
+import java.sql.SQLException;
+import java.util.List;
 
 public class DoctorService {
 	DoctorDao doctorDao=new DoctorDao();
@@ -22,7 +23,7 @@ public class DoctorService {
 	public Doctor findDoctorById(String doctor_id) throws SQLException {
 		return doctorDao.findDoctorById(doctor_id);
 	}
-	//根据id获取医生
+	//根据用户名密码获取医生
 	public Doctor getDoctorByDoc(Doctor doc) throws SQLException {
 		return doctorDao.getDoctorByDoc(doc);
 	}
@@ -35,8 +36,21 @@ public class DoctorService {
 		return doctorDao.getDocRoles(doctor_id);
 	}
 
+	/**
+	 * 根据科室获取所有医生
+	 * @param dept_id
+	 * @return
+	 * @throws SQLException
+     */
     public List<Doctor> getAllDocByDeptId(String dept_id) throws SQLException {
         return doctorDao.getAllDocByDeptId(dept_id);
-
     }
+
+	/**
+	 * 获取所有医生用于预约挂号
+	 * @return
+     */
+	public List<DoctorDTO> getAllForSchedule() throws SQLException {
+		return doctorDao.getAllForSchedule();
+	}
 }

@@ -3,6 +3,7 @@ package db.his.dao;
 import db.his.domain.DoctorSchedule;
 import db.his.util.JdbcUtil;
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
@@ -37,9 +38,25 @@ public class DoctorScheduleDao {
         qr.batch(sql,params);
     }
 
+    /**
+     * 根据医生id删除排班信息
+     * @param doctor_id
+     * @throws SQLException
+     */
     public void delete(String doctor_id) throws SQLException {
-
         String sql = "delete from schedule where doctor_id = ?";
         qr.update(sql,doctor_id);
+    }
+
+    /**
+     * 根据医生id获取排班信息
+     * @param doctor_id
+     * @return
+     * @throws SQLException
+     */
+    public List<DoctorSchedule> queryByDoc_id(String doctor_id) throws SQLException {
+        String sql = "select * from schedule where doctor_id = ?";
+        List<DoctorSchedule>  doctorSchedules = (List<DoctorSchedule>) qr.query(sql,doctor_id,new BeanListHandler(DoctorSchedule.class));
+        return doctorSchedules;
     }
 }

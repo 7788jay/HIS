@@ -4,6 +4,7 @@ import db.his.domain.Department;
 import db.his.domain.Doctor;
 import db.his.domain.DoctorSchedule;
 import db.his.domain.Profession;
+import db.his.domain.dto.DoctorDTO;
 import db.his.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by lwt on 2015/12/13.
@@ -31,6 +33,23 @@ public class DoctorScheduleController {
     CommonService cService=new CommonService();//普通服务层
     RoleService roleService=new RoleService();//角色服务层
 
+    /**
+     * 获取所有医生的预约信息
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="/getAll")
+    public List<DoctorDTO> getAll(){
+        List<DoctorDTO> doctorDTOs = doctorScheduleService.getAll();
+        return doctorDTOs;
+    }
+
+    /**
+     * 后台根据doctor_id获取医生排班信息
+     * @param doctor_id
+     * @param request
+     * @param response
+     */
     @RequestMapping(value = "/init/{doctor_id}")
     public void init(@PathVariable("doctor_id") String doctor_id, HttpServletRequest request, HttpServletResponse response){
         try {
@@ -60,7 +79,6 @@ public class DoctorScheduleController {
             e.printStackTrace();
             return new ModelMap("message","添加失败！");
         }
-
         return new ModelMap("message","添加成功！");
     }
 }

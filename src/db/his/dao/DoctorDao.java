@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
+import db.his.domain.dto.DoctorDTO;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
@@ -107,11 +108,33 @@ public class DoctorDao {
 		return doctor;
 	}
 
-
+	/**
+	 * 根据科室获取所有医生
+	 * @param dept_id
+	 * @return
+	 * @throws SQLException
+     */
     public List<Doctor> getAllDocByDeptId(String dept_id) throws SQLException {
         String sql="select * from outpatient_docter where dept_id = ?";
         List<Doctor> list=(List<Doctor>) qr.query(sql,dept_id,new BeanListHandler(Doctor.class));
         return list;
-
     }
+
+	/**
+	 * 获取所有医生用于预约挂号
+	 * @return
+     */
+	public List<DoctorDTO> getAllForSchedule() throws SQLException {
+		String sql = "SELECT\n" +
+					"	od.doctor_id,\n" +
+					"	od. NAME,\n" +
+					"	d. NAME dept_name,\n" +
+					"	p.profession_name\n" +
+					"FROM\n" +
+					"	outpatient_docter od\n" +
+					"LEFT JOIN department d ON od.dept_id = d.dept_id\n" +
+					"LEFT JOIN profession p ON od.profession_id = p.profession_id";
+		List<DoctorDTO> doctorDTOs = (List<DoctorDTO>) qr.query(sql,new BeanListHandler(DoctorDTO.class));
+		return doctorDTOs;
+	}
 }
