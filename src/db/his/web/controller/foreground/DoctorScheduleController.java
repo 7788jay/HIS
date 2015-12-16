@@ -1,9 +1,6 @@
 package db.his.web.controller.foreground;
 
-import db.his.domain.Department;
-import db.his.domain.Doctor;
-import db.his.domain.DoctorSchedule;
-import db.his.domain.Profession;
+import db.his.domain.*;
 import db.his.domain.dto.DoctorDTO;
 import db.his.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,6 +31,33 @@ public class DoctorScheduleController {
     DoctorService doctorService=new DoctorService();//医生服务层
     CommonService cService=new CommonService();//普通服务层
     RoleService roleService=new RoleService();//角色服务层
+
+    /**
+     *预约医生
+     * @param doctorSchedule
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/appoint")
+    public ModelMap appoint(DoctorSchedule doctorSchedule,int offset,HttpServletRequest request){
+        //获取延期后的时间
+        Calendar ca = Calendar.getInstance();
+        ca.add(Calendar.DATE, offset);// offset为增加的天数，可以改变的
+        Date d = ca.getTime();
+//        Patient patient = (Patient) request.getSession().getAttribute("user");
+        Appointment appointment = new Appointment();
+        appointment.setPatient_id("5555555");
+        appointment.setDoctor_id(doctorSchedule.getDoctor_id());
+        appointment.setTime(doctorSchedule.getTime());
+        appointment.setWeek(doctorSchedule.getWeek());
+
+        appointment.setAppoint_time(d);
+        doctorScheduleService.appoint(doctorSchedule,appointment);
+
+        return new ModelMap("message","添加成功！");
+    }
+
 
     /**
      * 获取所有医生的预约信息

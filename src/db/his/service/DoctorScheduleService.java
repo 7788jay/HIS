@@ -1,6 +1,7 @@
 package db.his.service;
 
 import db.his.dao.DoctorScheduleDao;
+import db.his.domain.Appointment;
 import db.his.domain.DoctorSchedule;
 import db.his.domain.dto.DoctorDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +45,16 @@ public class DoctorScheduleService {
             e.printStackTrace();
         }
         return doctorDTOs;
+    }
+
+    /**
+     * 预约
+     * @param doctorSchedule
+     * @param appointment
+     */
+    public void appoint(DoctorSchedule doctorSchedule, Appointment appointment) {
+        //先添加挂号记录
+
+        //修改可挂号数量
     }
 }
