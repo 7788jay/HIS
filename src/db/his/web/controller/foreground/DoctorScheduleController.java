@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -53,7 +54,11 @@ public class DoctorScheduleController {
         appointment.setWeek(doctorSchedule.getWeek());
 
         appointment.setAppoint_time(d);
-        doctorScheduleService.appoint(doctorSchedule,appointment);
+        try {
+            doctorScheduleService.appoint(doctorSchedule,appointment);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         return new ModelMap("message","添加成功！");
     }

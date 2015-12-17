@@ -1,5 +1,6 @@
 package db.his.service;
 
+import db.his.dao.AppointmentDao;
 import db.his.dao.DoctorScheduleDao;
 import db.his.domain.Appointment;
 import db.his.domain.DoctorSchedule;
@@ -17,10 +18,13 @@ import java.util.List;
 public class DoctorScheduleService {
     @Autowired
     private DoctorScheduleDao doctorScheduleDao;
-    DoctorService doctorService=new DoctorService();//医生服务层
+    @Autowired
+    private AppointmentDao appointmentDao;
+    DoctorService doctorService = new DoctorService();//医生服务层
 
     /**
      * 批量插入排班
+     *
      * @param doctorSchedules
      * @param doctor_id
      * @throws SQLException
@@ -32,13 +36,14 @@ public class DoctorScheduleService {
 
     /**
      * 获取医生信息及预约信息
+     *
      * @return
      */
     public List<DoctorDTO> getAll() {
         List<DoctorDTO> doctorDTOs = null;
         try {
             doctorDTOs = doctorService.getAllForSchedule();
-            for (DoctorDTO d : doctorDTOs){
+            for (DoctorDTO d : doctorDTOs) {
                 d.setDoctorSchedules(doctorScheduleDao.queryByDoc_id(d.getDoctor_id()));
             }
         } catch (SQLException e) {
@@ -49,12 +54,15 @@ public class DoctorScheduleService {
 
     /**
      * 预约
+     *
      * @param doctorSchedule
      * @param appointment
      */
-    public void appoint(DoctorSchedule doctorSchedule, Appointment appointment) {
+    public void appoint(DoctorSchedule doctorSchedule, Appointment appointment) throws SQLException {
         //先添加挂号记录
+        appointmentDao.insert(appointment);
 
         //修改可挂号数量
+        doctorScheduleDao.update(doctorSchedule);
     }
 }

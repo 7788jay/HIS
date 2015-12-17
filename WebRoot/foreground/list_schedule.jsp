@@ -131,7 +131,7 @@
                         offset: offset
                     },
                     success: function(data){
-
+                        vm.query();
                     }
                 });
             }

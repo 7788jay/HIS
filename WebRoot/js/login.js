@@ -1,5 +1,5 @@
 function check(){
-	
+
 	var username = $("#username").val();
 	var password = $("#password").val();
 	var status = $("#status").val();

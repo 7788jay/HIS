@@ -1,6 +1,16 @@
 @CHARSET "UTF-8";
 
 #login{
+	position: absolute;
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+	-moz-transform:  translateY(-50%);
+	-ms-transform:  translateY(-50%);
+	-o-transform:  translateY(-50%);
+	transform:  translateY(-50%);
+	background-color: #ccc;
+}
+/*#login{
 	position:absolute;
 	width: 600px;
 	height: 350px;
@@ -10,7 +20,7 @@
 	margin-top:-170px;
 	background-color: #5AA5F5;
 	
-}
+}*/
 #login_title{
 	width: 600px;
 	height: 70px;
