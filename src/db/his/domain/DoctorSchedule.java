@@ -13,9 +13,9 @@ public class DoctorSchedule {
     //星期几
     private String week;
     //最大预约数
-    private String sum;
+    private int sum;
     //剩余预约数
-    private String left_sum;
+    private int left_sum;
 
     public String getId() {
         return id;
@@ -49,19 +49,19 @@ public class DoctorSchedule {
         this.week = week;
     }
 
-    public String getSum() {
+    public int getSum() {
         return sum;
     }
 
-    public void setSum(String sum) {
+    public void setSum(int sum) {
         this.sum = sum;
     }
 
-    public String getLeft_sum() {
+    public int getLeft_sum() {
         return left_sum;
     }
 
-    public void setLeft_sum(String left_sum) {
+    public void setLeft_sum(int left_sum) {
         this.left_sum = left_sum;
     }
 }

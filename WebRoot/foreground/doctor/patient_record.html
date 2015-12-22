@@ -1,0 +1,140 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>病历书写</title>
+
+    <link rel="stylesheet" href="/HIS/plugin/bootstrap/css/bootstrap.css"/>
+    <link href="/HIS/css/lrtk.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="/HIS/js/manager.js"></script>
+    <script type="text/javascript" src="/HIS/js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="/HIS/plugin/layer.js"></script>
+    <script type="text/javascript" src="/HIS/js/doctor.js"></script>
+    <script type="text/javascript" src="/HIS/plugin/avalon/avalon.js"></script>
+    <script type="text/javascript" src="/HIS/plugin/bootstrap/js/bootstrap.js"></script>
+    <!--样式区-->
+    <style>
+        .ms-controller, .ms-important, [ms-controller], [ms-important] {
+            visibility: hidden;
+        }
+        .affix {
+            top: 30px;
+            width: 213px;
+        }
+        @media (min-width: 1200px) {
+            .affix {
+                top: 30px;
+                width: 263px;
+            }
+        }
+    </style>
+</head>
+
+<body ms-controller="record" data-spy="scroll" data-target="#sidebarMenu">
+<div class="container">
+    <div class="row">
+        <div class="navbar navbar-default navbar-static-top col-md-12" role="navigation">
+            <div class="navbar-header">
+                　 <a href="##" class="navbar-brand">HIS</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="##">首页</a></li>
+                <li class="active"><a href="##">病历书写</a></li>
+            </ul>
+            <p class="navbar-text navbar-right"><a href="foreground/login.jsp" class="navbar-link">注销 </a> </p>
+            <p class="navbar-text navbar-right">欢迎：{{userName}}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading"><h3 class="text-center">住院病历</h3></div>
+            <!-- Table -->
+            <table class="table">
+                <tr>
+                    <td>姓名: <u>haha</u></td>
+                    <td>性别: <u>haha</u></td>
+                    <td>年龄: <u>haha</u></td>
+                    <td>姓名: <u>haha</u></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3" id="sidebarMenu">
+            <ul class="nav nav-pills nav-stacked" data-spy="affix" data-offset-top="200">
+                <li class="active"><a href="#section-1">现病史</a></li>
+                <li><a href="#section-2">既往史</a></li>
+                <li><a href="#section-3">个人史</a></li>
+                <li><a href="#section-4">体格检查</a></li>
+                <li><a href="#section-5">初步诊断</a></li>
+            </ul>
+        </div>
+        <div class="col-md-9">
+            <div class="panel panel-default panel-info" id="section-1">
+                <div class="panel-heading">图解CSS3</div>
+                <div class="panel-body">详细讲解了选择器、边框、背景、文本、颜色、盒模型、伸缩布局盒模型、多列布局、渐变、过渡、动画、媒体、响应Web设计、Web字体等主题下涵盖的所有CSS3新特性</div>
+                <div class="panel-footer">作者：大漠</div>
+            </div>
+            <div class="panel panel-default panel-info" id="section-2">
+                <div class="panel-heading">图解CSS3</div>
+                <div class="panel-body">详细讲解了选择器、边框、背景、文本、颜色、盒模型、伸缩布局盒模型、多列布局、渐变、过渡、动画、媒体、响应Web设计、Web字体等主题下涵盖的所有CSS3新特性</div>
+                <div class="panel-footer">作者：大漠</div>
+            </div>
+            <div class="panel panel-default panel-info" id="section-3">
+                <div class="panel-heading">图解CSS3</div>
+                <div class="panel-body">详细讲解了选择器、边框、背景、文本、颜色、盒模型、伸缩布局盒模型、多列布局、渐变、过渡、动画、媒体、响应Web设计、Web字体等主题下涵盖的所有CSS3新特性</div>
+                <div class="panel-footer">作者：大漠</div>
+            </div>
+            <div class="panel panel-default panel-info" id="section-4">
+                <div class="panel-heading">图解CSS3</div>
+                <div class="panel-body">详细讲解了选择器、边框、背景、文本、颜色、盒模型、伸缩布局盒模型、多列布局、渐变、过渡、动画、媒体、响应Web设计、Web字体等主题下涵盖的所有CSS3新特性</div>
+                <div class="panel-footer">作者：大漠</div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+
+    avalon.ready(function () {
+        var vm = avalon.define({
+            $id: "record",
+            data: [],
+            month: "",
+            day: "",
+            //获取用户
+            init: function(){
+                $.ajax({
+                    url: "fore/getCurrentUser",
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data.name);
+                        vm.userName = data.name;
+                    }
+                });
+            },
+            //查询
+            query: function () {
+                $.ajax({
+                    url: "fore/schedule/getAll",
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        vm.data = data;
+                    }
+                });
+            }
+        });
+        avalon.scan();
+//        vm.query();
+        var date = new Date();
+        vm.month = date.getMonth();
+        vm.day = date.getDate();
+    });
+
+</script>
+

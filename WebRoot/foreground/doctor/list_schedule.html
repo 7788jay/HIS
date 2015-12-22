@@ -1,0 +1,117 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>患者列表</title>
+    <base href="/HIS/">
+    <link rel="stylesheet" href="./plugin/bootstrap/css/bootstrap.css"/>
+    <link href="./css/lrtk.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="./js/manager.js"></script>
+    <script type="text/javascript" src="./js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="./plugin/layer.js"></script>
+    <script type="text/javascript" src="./js/doctor.js"></script>
+    <script type="text/javascript" src="./plugin/avalon/avalon.js"></script>
+    <!--样式区-->
+    <style>
+        .ms-controller, .ms-important, [ms-controller], [ms-important] {
+            visibility: hidden;
+        }
+    </style>
+</head>
+
+<body ms-controller="schedule">
+<div class="container">
+    <div class="row">
+        <div class="navbar navbar-default navbar-static-top col-md-12" role="navigation">
+            <div class="navbar-header">
+                　 <a href="##" class="navbar-brand">HIS</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="##">首页</a></li>
+                <li class="active"><a href="##">患者列表</a></li>
+            </ul>
+            <p class="navbar-text navbar-right"><a href="foreground/login.jsp" class="navbar-link">注销 </a> </p>
+            <p class="navbar-text navbar-right">欢迎：{{userName}}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3 col-sm-4" ms-repeat="data">
+            <div class="thumbnail">
+                <div class="caption">
+                    <p>{{el.priority}}号</p>
+                    <h3>{{el.name}}</h3>
+                    <p>性别：{{el.sex}}</p>
+                    <p>年龄：{{el.age}}</p>
+                    <p>预约时间：{{el.create_time | date("yyyy-MM-dd HH:mm")}}</p>
+                    <p>
+                        <a href="javascript:void(0)" ms-click="treat" class="btn btn-primary" role="button">叫号</a>
+                        <a href="#" class="btn btn-default" role="button">Button</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+
+    avalon.ready(function () {
+        var vm = avalon.define({
+            $id: "schedule",
+            data: [],
+            userName: "",
+            month: "",
+            day: "",
+            week: ["星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"],
+            init: function(){
+                $.ajax({
+                    url: "fore/getCurrentUser",
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data.name);
+                        vm.userName = data.name;
+                    }
+                });
+            },
+            query: function () {
+                $.ajax({
+                    url: "fore/schedule/getAll",
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        vm.data = data;
+                    }
+                });
+            },
+            treat: function () {
+                $.ajax({
+                    url: "servlet/doctorSchedule/appoint",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        id: schedule.id,
+                        doctor_id: schedule.doctor_id,
+                        week: schedule.week,
+                        time: schedule.time,
+                        left_sum: schedule.left_sum,
+                        offset: offset
+                    },
+                    success: function (data) {
+                        layer.alert(data.message);
+                        vm.query();
+                    }
+                });
+            }
+        });
+        avalon.scan();
+        vm.init();
+        vm.query();
+        var date = new Date();
+        vm.month = date.getMonth();
+        vm.day = date.getDate();
+        var week = date.getDay();
+    });
+
+</script>
+

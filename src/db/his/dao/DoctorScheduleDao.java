@@ -66,7 +66,7 @@ public class DoctorScheduleDao {
      */
     public void update(DoctorSchedule doctorSchedule) throws SQLException {
         String sql = "update schedule set left_sum = ? where id = ?";
-        Object[] params = new Object[]{Integer.parseInt(doctorSchedule.getLeft_sum())-1,doctorSchedule.getId()};
+        Object[] params = new Object[]{doctorSchedule.getLeft_sum()-1,doctorSchedule.getId()};
         qr.update(sql,params);
     }
 }

@@ -23,7 +23,7 @@ avalon.ready(function () {
 				if(data.message == "error"){
 					layer.msg("用户名或密码错误，请重试！");
 				}else{
-					window.location.href = "servlet/"+data.message;
+					window.location.href = data.message;
 				}
 			});
 		}

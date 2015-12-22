@@ -42,8 +42,14 @@ public class Doctor {
 	public Doctor() {
 		super();
 	}
+
+	public Doctor(String name, String password) {
+		this.name = name;
+		this.password = password;
+	}
+
 	public Doctor(String id, String dept_id, String profession_id,
-			String name, String password) {
+				  String name, String password) {
 		super();
 		this.doctor_id = id;
 		this.dept_id = dept_id;

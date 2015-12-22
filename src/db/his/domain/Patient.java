@@ -111,4 +111,12 @@ public class Patient {
     public void setCase_id(String case_id) {
         this.case_id = case_id;
     }
+
+    public Patient() {
+    }
+
+    public Patient(String name, String password) {
+        this.name = name;
+        this.password = password;
+    }
 }

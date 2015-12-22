@@ -21,7 +21,7 @@ public class PatientDao {
      * @return 病人
      * @throws SQLException
      */
-    public Patient queryPatient(Patient p) throws SQLException {
+    public Patient queryPatientByP(Patient p) throws SQLException {
         String sql="select * from patient where name=? and password=?";
         Patient patient=(Patient) qr.query(sql,new Object[]{p.getName(),p.getPassword()},new BeanHandler(Patient.class));
         return patient;
@@ -38,4 +38,12 @@ public class PatientDao {
         qr.update(sql,params);
     }
 
+//    /**
+//     * 根据用户名获取医生
+//     * @param username
+//     * @return
+//     */
+//    public Patient getPatientByName(String username) {
+//        return null;
+//    }
 }

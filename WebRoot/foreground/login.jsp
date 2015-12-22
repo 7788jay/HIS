@@ -29,20 +29,20 @@
     <form class="form-horizontal" role="form">
         <h2>HIS 登录</h2>
         <div class="form-group">
-            <label for="inputName" class="col-sm-2 control-label">用户名</label>
-            <div class="col-sm-10">
+            <label for="inputName" class="col-sm-2 col-sm-offset-1 control-label">用户名</label>
+            <div class="col-sm-8">
                 <input type="text" class="form-control" id="inputName" placeholder="用户名" ms-duplex="name"/>
             </div>
         </div>
         <div class="form-group">
-            <label for="inputPassword3" class="col-sm-2 control-label">密码</label>
-            <div class="col-sm-10">
+            <label for="inputPassword3" class="col-sm-2 col-sm-offset-1 control-label">密码</label>
+            <div class="col-sm-8">
                 <input type="password" class="form-control" id="inputPassword3" placeholder="密码" ms-duplex="password">
             </div>
         </div>
         <div class="form-group">
-            <label for="status" class="col-sm-2 control-label">身份</label>
-            <div class="col-sm-10">
+            <label for="status" class="col-sm-2 col-sm-offset-1 control-label">身份</label>
+            <div class="col-sm-8">
                 <select class="form-control" name="status" id="status"  ms-duplex="status">
                     <option ms-repeat="identity" ms-attr-value="{{$key}}">{{$val}}</option>
                 </select>

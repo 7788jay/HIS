@@ -46,21 +46,26 @@ public class DoctorScheduleController {
         Calendar ca = Calendar.getInstance();
         ca.add(Calendar.DATE, offset);// offset为增加的天数，可以改变的
         Date d = ca.getTime();
-//        Patient patient = (Patient) request.getSession().getAttribute("user");
-        Appointment appointment = new Appointment();
-        appointment.setPatient_id("5555555");
-        appointment.setDoctor_id(doctorSchedule.getDoctor_id());
-        appointment.setTime(doctorSchedule.getTime());
-        appointment.setWeek(doctorSchedule.getWeek());
+        Patient patient = (Patient) request.getSession().getAttribute("patient");
+        if(patient!=null) {
+            Appointment appointment = new Appointment();
+            appointment.setPatient_id(patient.getId());
+            appointment.setDoctor_id(doctorSchedule.getDoctor_id());
+            appointment.setTime(doctorSchedule.getTime());
+            appointment.setWeek(doctorSchedule.getWeek());
+            appointment.setPriority(doctorSchedule.getSum()-(doctorSchedule.getLeft_sum()-1));
 
-        appointment.setAppoint_time(d);
-        try {
-            doctorScheduleService.appoint(doctorSchedule,appointment);
-        } catch (SQLException e) {
-            e.printStackTrace();
+            appointment.setAppoint_time(d);
+            try {
+                doctorScheduleService.appoint(doctorSchedule, appointment);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return new ModelMap("message","预约失败！");
+            }
+            return new ModelMap("message","预约成功！");
+        }else{
+            return new ModelMap("message","请登录！");
         }
-
-        return new ModelMap("message","添加成功！");
     }
 
 

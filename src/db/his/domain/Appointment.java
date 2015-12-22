@@ -17,6 +17,10 @@ public class Appointment {
     private String week;
     //预约时间
     private Date appoint_time;
+    //排序号
+    private int priority;
+    //叫号状态
+    private int status;
 
     public String getId() {
         return id;
@@ -64,5 +68,21 @@ public class Appointment {
 
     public void setAppoint_time(Date appoint_time) {
         this.appoint_time = appoint_time;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

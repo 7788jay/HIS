@@ -36,4 +36,14 @@ public class PatientService {
         }
         return map;
     }
+
+    /**
+     * 根据用户名,密码获取医生
+     * @param p
+     * @return
+     * @throws SQLException
+     */
+    public Patient queryPatientByP(Patient p) throws SQLException {
+        return patientDao.queryPatientByP(p);
+    }
 }
