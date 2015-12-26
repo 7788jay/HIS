@@ -6,8 +6,8 @@ package db.his.domain;
 public class Patient {
 
    private String id;
-    //病历id
    private String record_id;
+    //病历id
    private String file_id;
     //医保
    private String insurance_id;

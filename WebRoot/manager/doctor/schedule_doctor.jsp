@@ -19,36 +19,6 @@
 <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="js/doctor.js"></script>
 <script type="text/javascript" src="plugin/layer.js"></script>
-<script type="text/javascript" src="plugin/avalon/avalon.js"></script>
-	<script type="text/javascript">
-		avalon.ready(function () {
-			var vm = avalon.define({
-				$id: "schedule",
-				week: ["星期一","星期二","星期三","星期四","星期五","星期六","星期日"],
-				schedule: [{time:0,week:"1",sum:1},{time:0,week:"2",sum:2},
-					{time:0,week:"3",sum:3},{time:0,week:"4",sum:4},
-					{time:0,week:"5",sum:5},{time:0,week:"6",sum:6},
-					{time:0,week:"7",sum:7},{time:1,week:"1",sum:1},
-					{time:1,week:"2",sum:2},{time:1,week:"3",sum:3},
-					{time:1,week:"4",sum:4},{time:1,week:"5",sum:0},
-					{time:1,week:"6",sum:0},{time:1,week:"7",sum:7}],
-
-				save: function(){
-					$.ajax({
-						url:"servlet/doctorSchedule/add?doctor_id=${doctor.doctor_id }",
-						type: "POST",
-						contentType:"application/json",
-						dataType:"json",
-						data: JSON.stringify(vm.schedule),
-						success:function(data){
-							layer.alert(data.message);
-						}
-					});
-				}
-			});
-			avalon.scan();
-		});
-	</script>
 
 </head>
 
@@ -74,17 +44,65 @@
 			<tr>
 				<td class="td_01">上午</td>
 				<td class="td_01" ms-repeat="schedule" ms-if-loop="el.time==0">
-					<input style="width: 25px" ms-attr-value="{{el.sum}}">
+					<input style="width: 25px" name="schedule" ms-attr-value="{{el.sum}}">
 				</td>
 			</tr>
 			<tr>
 				<td class="td_01">下午</td>
 				<td class="td_01" ms-repeat="schedule" ms-if-loop="el.time==1">
-					<input style="width: 25px" ms-attr-value="{{el.sum}}">
+					<input style="width: 25px" name="schedule" ms-attr-value="{{el.sum}}">
 				</td>
 			</tr>
     	</table>
 		<button  ms-click="save()">保存</button>
+		{{name}}
 	</div>
 </body>
 </html>
+<script type="text/javascript" src="plugin/avalon/avalon.js"></script>
+<script type="text/javascript">
+	avalon.ready(function () {
+		var vm = avalon.define({
+			$id: "schedule",
+			week: ["星期一","星期二","星期三","星期四","星期五","星期六","星期日"],
+			schedule: [],
+			init: function(){
+				$.ajax({
+					url:"servlet/doctorSchedule/getOne?doctor_id=${doctor.doctor_id }",
+					type: "GET",
+					contentType:"application/json",
+					dataType:"json",
+					success:function(data){
+						console.log(data);
+						vm.schedule=data;
+					}
+				})
+			},
+			save: function(){
+				var schedule =[];
+				$("input[name='schedule']:visible").each(function(i){
+					if(i<7){
+
+						schedule.push({time:0,week:i,sum:$(this).val()});
+					}else {
+						schedule.push({time:1,week:i%7,sum:$(this).val()});
+
+					}
+				});
+				console.log(schedule);
+				$.ajax({
+					url:"servlet/doctorSchedule/add?doctor_id=${doctor.doctor_id }",
+					type: "POST",
+					contentType:"application/json",
+					dataType:"json",
+					data: JSON.stringify(schedule),
+					success:function(data){
+						layer.alert(data.message);
+					}
+				});
+			}
+		});
+		avalon.scan();
+		vm.init();
+	});
+</script>

@@ -40,7 +40,7 @@
                 <li><a href="##">首页</a></li>
                 <li class="active"><a href="##">病历书写</a></li>
             </ul>
-            <p class="navbar-text navbar-right"><a href="foreground/login.jsp" class="navbar-link">注销 </a> </p>
+            <p class="navbar-text navbar-right"><a href="/HIS/foreground/login.jsp" class="navbar-link">注销 </a> </p>
             <p class="navbar-text navbar-right">欢迎：{{userName}}</p>
         </div>
     </div>
@@ -51,11 +51,23 @@
             <!-- Table -->
             <table class="table">
                 <tr>
-                    <td>姓名: <u>haha</u></td>
-                    <td>性别: <u>haha</u></td>
-                    <td>年龄: <u>haha</u></td>
+                    <td colspan="4" class="text-right">
+                        <a class="btn btn-warning">延后诊断</a>
+                        <a class="btn btn-success">结束诊断</a>
+                        <a class="btn btn-info" ms-click="save">保存</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>姓名: <u>{{patient.name}}</u></td>
+                    <td>性别: <u>{{patient.sex}}</u></td>
+                    <td>年龄: <u>{{patient.age}}</u></td>
                     <td>姓名: <u>haha</u></td>
                 </tr>
+                <tr>
+                    <td class="text-right">主诉: </td>
+                    <td colspan="3"><input class="form-control"/></td>
+                </tr>
+
             </table>
         </div>
     </div>
@@ -70,27 +82,48 @@
             </ul>
         </div>
         <div class="col-md-9">
-            <div class="panel panel-default panel-info" id="section-1">
-                <div class="panel-heading">图解CSS3</div>
-                <div class="panel-body">详细讲解了选择器、边框、背景、文本、颜色、盒模型、伸缩布局盒模型、多列布局、渐变、过渡、动画、媒体、响应Web设计、Web字体等主题下涵盖的所有CSS3新特性</div>
-                <div class="panel-footer">作者：大漠</div>
+            <div class="panel panel-default panel-info" ms-repeat="data" ms-attr-id="section-{{$index+1}}">
+                <div class="panel-heading">{{el.name | name}}</div>
+                <div class="panel-body">
+                    <textarea style="font-size: 20px" class="form-control" rows="10" ms-attr-value="el.comment"></textarea>
+                </div>
+                <div class="panel-footer">修改人：{{el.modifier}}</div>
+            </div>
+            <!--<div class="panel panel-default panel-info" id="section-1">
+                <div class="panel-heading">现病史</div>
+                <div class="panel-body">
+                    <textarea style="font-size: 20px" class="form-control" rows="10" ms-duplex="present.comment"></textarea>
+                </div>
+                <div class="panel-footer">修改人：大漠{{present.comment}}</div>
             </div>
             <div class="panel panel-default panel-info" id="section-2">
-                <div class="panel-heading">图解CSS3</div>
-                <div class="panel-body">详细讲解了选择器、边框、背景、文本、颜色、盒模型、伸缩布局盒模型、多列布局、渐变、过渡、动画、媒体、响应Web设计、Web字体等主题下涵盖的所有CSS3新特性</div>
+                <div class="panel-heading">既往史</div>
+                <div class="panel-body">
+                    <textarea style="font-size: 20px" class="form-control" rows="10" ms-duplex="past"></textarea>
+                </div>
                 <div class="panel-footer">作者：大漠</div>
             </div>
             <div class="panel panel-default panel-info" id="section-3">
-                <div class="panel-heading">图解CSS3</div>
-                <div class="panel-body">详细讲解了选择器、边框、背景、文本、颜色、盒模型、伸缩布局盒模型、多列布局、渐变、过渡、动画、媒体、响应Web设计、Web字体等主题下涵盖的所有CSS3新特性</div>
+                <div class="panel-heading">个人史</div>
+                <div class="panel-body">
+                    <textarea style="font-size: 20px" class="form-control" rows="10" ms-duplex="person"></textarea>
+                </div>
                 <div class="panel-footer">作者：大漠</div>
             </div>
             <div class="panel panel-default panel-info" id="section-4">
-                <div class="panel-heading">图解CSS3</div>
-                <div class="panel-body">详细讲解了选择器、边框、背景、文本、颜色、盒模型、伸缩布局盒模型、多列布局、渐变、过渡、动画、媒体、响应Web设计、Web字体等主题下涵盖的所有CSS3新特性</div>
+                <div class="panel-heading">体格检查</div>
+                <div class="panel-body">
+                    <textarea style="font-size: 20px" class="form-control" rows="10" ms-duplex="exam"></textarea>
+                </div>
                 <div class="panel-footer">作者：大漠</div>
             </div>
-
+            <div class="panel panel-default panel-info" id="section-5">
+                <div class="panel-heading">初步诊断</div>
+                <div class="panel-body">
+                    <textarea style="font-size: 20px" class="form-control" rows="10" ms-duplex="diagnosis"></textarea>
+                </div>
+                <div class="panel-footer">作者：大漠</div>
+            </div>-->
         </div>
     </div>
 </div>
@@ -101,13 +134,14 @@
     avalon.ready(function () {
         var vm = avalon.define({
             $id: "record",
-            data: [],
-            month: "",
-            day: "",
+            userName: "",
+            patient_id: "",
+            data:[],
+            patient: {},
             //获取用户
             init: function(){
                 $.ajax({
-                    url: "fore/getCurrentUser",
+                    url: "/HIS/fore/getCurrentUser",
                     type: "GET",
                     dataType: "json",
                     success: function (data) {
@@ -115,25 +149,60 @@
                         vm.userName = data.name;
                     }
                 });
+                $.ajax({
+                    url: "/HIS/servlet/PatientServlet/queryOne?patient_id="+vm.patient_id,
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        vm.patient = data;
+                    }
+                });
             },
             //查询
             query: function () {
                 $.ajax({
-                    url: "fore/schedule/getAll",
+                    url: "/HIS/fore/file/queryOne?patient_id="+vm.patient_id,
                     type: "GET",
                     dataType: "json",
                     success: function (data) {
                         console.log(data);
                         vm.data = data;
                     }
+                })
+            },
+            //保存
+            save: function(){
+                var data = vm.data;
+                data.forEach(function(v,i){
+                    var text = $('textarea').eq(i).val();
+                    if(text!=v['comment']){
+                        data[i].comment=text;
+                        data[i].modifier = vm.userName;
+                    }
                 });
+                console.log(data);
+                $.ajax({
+                    url: "/HIS/fore/file/add",
+                    type: "POST",
+                    contentType:"application/json",
+                    data: JSON.stringify(data),
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        layer.alert(data.message);
+                    }
+                })
             }
         });
+        avalon.filters.name=function(str){
+            var map = {"present":"现病史","past":"既往史","person":"个人史","exam":"体格检查","diagnosis":"初步诊断"};
+            return map[str];
+        };
         avalon.scan();
-//        vm.query();
-        var date = new Date();
-        vm.month = date.getMonth();
-        vm.day = date.getDate();
+        vm.patient_id = localStorage.getItem("patient_id");
+        vm.init();
+        vm.query();
     });
 
 </script>

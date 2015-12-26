@@ -28,9 +28,6 @@ public class DoctorScheduleDao {
         Object[][] params = new Object[doctorSchedules.size()][];
         int i = 0;
         for( DoctorSchedule ds : doctorSchedules){
-            System.out.println(ds.getTime());
-            System.out.println(ds.getWeek());
-            System.out.println(ds.getSum());
             params[i] = new Object[]{doctor_id, ds.getTime(), ds.getWeek(), ds.getSum(), ds.getSum()};
             i++;
         }
@@ -55,7 +52,7 @@ public class DoctorScheduleDao {
      * @throws SQLException
      */
     public List<DoctorSchedule> queryByDoc_id(String doctor_id) throws SQLException {
-        String sql = "select * from schedule where doctor_id = ?";
+        String sql = "select * from schedule where doctor_id = ? order by time,week";
         List<DoctorSchedule>  doctorSchedules = (List<DoctorSchedule>) qr.query(sql,doctor_id,new BeanListHandler(DoctorSchedule.class));
         return doctorSchedules;
     }

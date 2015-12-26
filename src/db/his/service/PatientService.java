@@ -38,12 +38,22 @@ public class PatientService {
     }
 
     /**
-     * 根据用户名,密码获取医生
+     * 根据用户名,密码获取病人
      * @param p
      * @return
      * @throws SQLException
      */
     public Patient queryPatientByP(Patient p) throws SQLException {
         return patientDao.queryPatientByP(p);
+    }
+
+    /**
+     *根据id获取病人信息
+     * @param id
+     * @return
+     * @throws SQLException
+     */
+    public Patient queryPatientById(String id) throws SQLException {
+        return patientDao.queryPatientById(id);
     }
 }

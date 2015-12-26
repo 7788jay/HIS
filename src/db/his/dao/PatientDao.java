@@ -38,6 +38,19 @@ public class PatientDao {
         qr.update(sql,params);
     }
 
+    /**
+     * 根据id获取病人信息
+     * @param id
+     * @return
+     * @throws SQLException
+     */
+    public Patient queryPatientById(String id) throws SQLException {
+        String sql="select * from patient where id=?";
+        Patient patient=(Patient) qr.query(sql,id,new BeanHandler(Patient.class));
+        return patient;
+    }
+
+
 //    /**
 //     * 根据用户名获取医生
 //     * @param username

@@ -43,7 +43,7 @@
                     <p>年龄：{{el.age}}</p>
                     <p>预约时间：{{el.create_time | date("yyyy-MM-dd HH:mm")}}</p>
                     <p>
-                        <a href="javascript:void(0)" ms-click="treat" class="btn btn-primary" role="button">叫号</a>
+                        <a href="javascript:void(0)" ms-click="treat(el.id)" class="btn btn-primary" role="button">叫号</a>
                         <a href="#" class="btn btn-default" role="button">Button</a>
                     </p>
                 </div>
@@ -84,24 +84,11 @@
                     }
                 });
             },
-            treat: function () {
-                $.ajax({
-                    url: "servlet/doctorSchedule/appoint",
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        id: schedule.id,
-                        doctor_id: schedule.doctor_id,
-                        week: schedule.week,
-                        time: schedule.time,
-                        left_sum: schedule.left_sum,
-                        offset: offset
-                    },
-                    success: function (data) {
-                        layer.alert(data.message);
-                        vm.query();
-                    }
-                });
+            treat: function(patient_id) {
+                console.log(patient_id);
+                localStorage.removeItem("patient_id");
+                localStorage.setItem("patient_id",patient_id);
+                window.location.href="/HIS/foreground/doctor/patient_record.html";
             }
         });
         avalon.scan();

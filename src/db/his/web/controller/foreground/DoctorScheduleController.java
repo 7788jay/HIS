@@ -28,70 +28,84 @@ import java.util.List;
 public class DoctorScheduleController {
     @Autowired
     private DoctorScheduleService doctorScheduleService;
-    DepartmentService dService=new DepartmentService();//科室服务层
-    DoctorService doctorService=new DoctorService();//医生服务层
-    CommonService cService=new CommonService();//普通服务层
-    RoleService roleService=new RoleService();//角色服务层
+    DepartmentService dService = new DepartmentService();//科室服务层
+    DoctorService doctorService = new DoctorService();//医生服务层
+    CommonService cService = new CommonService();//普通服务层
+    RoleService roleService = new RoleService();//角色服务层
 
     /**
-     *预约医生
+     * 前台病人预约医生
+     *
      * @param doctorSchedule
      * @param request
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "/appoint")
-    public ModelMap appoint(DoctorSchedule doctorSchedule,int offset,HttpServletRequest request){
+    public ModelMap appoint(DoctorSchedule doctorSchedule, int offset, HttpServletRequest request) {
         //获取延期后的时间
         Calendar ca = Calendar.getInstance();
         ca.add(Calendar.DATE, offset);// offset为增加的天数，可以改变的
         Date d = ca.getTime();
         Patient patient = (Patient) request.getSession().getAttribute("patient");
-        if(patient!=null) {
+        if (patient != null) {
             Appointment appointment = new Appointment();
             appointment.setPatient_id(patient.getId());
             appointment.setDoctor_id(doctorSchedule.getDoctor_id());
             appointment.setTime(doctorSchedule.getTime());
             appointment.setWeek(doctorSchedule.getWeek());
-            appointment.setPriority(doctorSchedule.getSum()-(doctorSchedule.getLeft_sum()-1));
+            appointment.setPriority(doctorSchedule.getSum() - (doctorSchedule.getLeft_sum() - 1));
 
             appointment.setAppoint_time(d);
             try {
                 doctorScheduleService.appoint(doctorSchedule, appointment);
             } catch (SQLException e) {
                 e.printStackTrace();
-                return new ModelMap("message","预约失败！");
+                return new ModelMap("message", "预约失败！");
             }
-            return new ModelMap("message","预约成功！");
-        }else{
-            return new ModelMap("message","请登录！");
+            return new ModelMap("message", "预约成功！");
+        } else {
+            return new ModelMap("message", "请登录！");
         }
     }
 
 
     /**
-     * 获取所有医生的预约信息
+     * 前台病人获取所有医生的预约信息
+     *
      * @return
      */
     @ResponseBody
-    @RequestMapping(value="/getAll")
-    public List<DoctorDTO> getAll(){
+    @RequestMapping(value = "/getAll")
+    public List<DoctorDTO> getAll() {
         List<DoctorDTO> doctorDTOs = doctorScheduleService.getAll();
         return doctorDTOs;
     }
 
     /**
+     * 后台获取医生排班用于回显
+     * @param doctor_id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/getOne")
+    public List<DoctorSchedule> getOne(String doctor_id) {
+        return doctorScheduleService.queryByDoc_id(doctor_id);
+    }
+
+    /**
      * 后台根据doctor_id获取医生排班信息
+     *
      * @param doctor_id
      * @param request
      * @param response
      */
     @RequestMapping(value = "/init/{doctor_id}")
-    public void init(@PathVariable("doctor_id") String doctor_id, HttpServletRequest request, HttpServletResponse response){
+    public void init(@PathVariable("doctor_id") String doctor_id, HttpServletRequest request, HttpServletResponse response) {
         try {
-            Doctor doctor=doctorService.findDoctorById(doctor_id);//获取医生信息
-            Department dept=dService.findDepartment(doctor.getDept_id());//获取医生所在科室
-            Profession pro=cService.findProfession(doctor.getProfession_id());//获取医生职称
+            Doctor doctor = doctorService.findDoctorById(doctor_id);//获取医生信息
+            Department dept = dService.findDepartment(doctor.getDept_id());//获取医生所在科室
+            Profession pro = cService.findProfession(doctor.getProfession_id());//获取医生职称
             request.setAttribute("doctor", doctor);
             request.setAttribute("dept", dept);
             request.setAttribute("pro", pro);
@@ -100,21 +114,23 @@ public class DoctorScheduleController {
             e.printStackTrace();
         }
     }
+
     /**
      * 添加医生排班记录
+     *
      * @param doctorSchedule
      * @param doctor_id
      * @return
      */
     @ResponseBody
-    @RequestMapping(value="/add")
-    public ModelMap add(@RequestBody DoctorSchedule[] doctorSchedule, String doctor_id){
+    @RequestMapping(value = "/add")
+    public ModelMap add(@RequestBody DoctorSchedule[] doctorSchedule, String doctor_id) {
         try {
-            doctorScheduleService.batchInsert(Arrays.asList(doctorSchedule),doctor_id);
+            doctorScheduleService.batchInsert(Arrays.asList(doctorSchedule), doctor_id);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ModelMap("message","添加失败！");
+            return new ModelMap("message", "保存失败！");
         }
-        return new ModelMap("message","添加成功！");
+        return new ModelMap("message", "保存成功！");
     }
 }

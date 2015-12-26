@@ -35,7 +35,7 @@ public class DoctorScheduleService {
     }
 
     /**
-     * 获取医生信息及预约信息
+     * 获取全部医生信息及预约信息（病人挂号）
      *
      * @return
      */
@@ -64,5 +64,20 @@ public class DoctorScheduleService {
 
         //修改可挂号数量
         doctorScheduleDao.update(doctorSchedule);
+    }
+
+    /**
+     * 根据医生id获取排班信息
+     * @param doctor_id
+     * @return
+     * @throws SQLException
+     */
+    public List<DoctorSchedule> queryByDoc_id(String doctor_id) {
+        try {
+            return doctorScheduleDao.queryByDoc_id(doctor_id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

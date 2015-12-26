@@ -35,7 +35,7 @@ create table role_outpatient_docter(
 ++++++++用户角色++++
 
 
-++++++++挂号表++++++++
+++++++++医生时间安排表++++++++
 CREATE TABLE schedule(
   id INT AUTO_INCREMENT NOT NULL PRIMARY KEY ,
   doctor_id VARCHAR(40) NOT NULL ,
@@ -44,4 +44,17 @@ CREATE TABLE schedule(
   sum INT NOT NULL ,
   left_sum INT NOT NULL
 
+);
+++++++++挂号表+++++
+create TABLE appointment (
+    id INT not null,
+    patient_id VARCHAR(40) not null default '',
+    doctor_id VARCHAR(40) not null default '',
+    appoint_time DATE not null default '',
+    "time" INT not null,
+    week INT not null,
+    priority INT not null,
+    status INT default 0,
+    create_time TIMESTAMP not null default CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
 );

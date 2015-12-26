@@ -4,7 +4,7 @@
   User: lwt
   Date: 2015/12/6
   Time: 19:09
-  To change this template use File | Settings | File Templates.
+  To change this template use PatientFile | Settings | PatientFile Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
