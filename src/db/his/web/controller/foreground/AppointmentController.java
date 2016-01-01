@@ -6,6 +6,7 @@ import db.his.domain.dto.PatientDTO;
 import db.his.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -24,6 +25,12 @@ public class AppointmentController {
     @Autowired
     private AppointmentService appointmentService;
 
+    /**
+     * 医生获取病人挂号列表
+     * @param appointment
+     * @param session
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/getAll")
     public List<PatientDTO> getAll(Appointment appointment, HttpSession session){
@@ -34,5 +41,29 @@ public class AppointmentController {
         appointment.setTime(date.getHours()> 12? "1":"0");
 
         return appointmentService.getAll(appointment);
+    }
+
+    /**
+     * 结束诊断
+     * @param appointment_id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/updateStatus")
+    public ModelMap updateStatus(String appointment_id){
+        appointmentService.update("status","1",appointment_id);
+        return new ModelMap("message", "完成诊断！请选择下一位患者！");
+    }
+
+    /**
+     * 延后诊断
+     * @param appointment_id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/updatePriority")
+    public ModelMap updatePriority(String appointment_id){
+        appointmentService.update("priority","5",appointment_id);
+        return new ModelMap("message", "延后诊断！请选择下一位患者！");
     }
 }

@@ -1,15 +1,14 @@
 package db.his.dao;
 
-import java.sql.SQLException;
-import java.util.List;
-
+import db.his.domain.Privilege;
+import db.his.domain.Profession;
+import db.his.util.JdbcUtil;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
-import db.his.domain.Privilege;
-import db.his.domain.Profession;
-import db.his.util.JdbcUtil;
+import java.sql.SQLException;
+import java.util.List;
 
 public class CommonDao {
 	QueryRunner qr=new QueryRunner(JdbcUtil.getDataSources());
@@ -25,6 +24,7 @@ public class CommonDao {
 	 * @return 职称
 	 * @throws SQLException 
 	 */
+	@Deprecated
 	public Profession findProfession(String profession_id) throws SQLException {
 		String sql="select * from profession where profession_id=?";
 		Profession profession= (Profession) qr.query(sql,profession_id, new BeanHandler(Profession.class));

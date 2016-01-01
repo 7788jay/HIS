@@ -60,5 +60,23 @@ public class AppointmentDao {
         return patientDTOs;
     }
 
+    /**
+     * 更新挂号状态
+     * @param property
+     * @param value
+     * @param appointment_id
+     * @throws SQLException
+     */
+    public void update(String property,String value,String appointment_id) throws SQLException {
+        String sql = "";
+        if ("priority".equals(property)) {
+            sql = "update appointment set priority = priority+? where id = ?";
+        }else {
+            sql = "update appointment set " + property + " = ? where id = ?";
+        }
+        Object[] params = new Object[]{value,appointment_id};
+        qr.update(sql,params);
+    }
+
 
 }

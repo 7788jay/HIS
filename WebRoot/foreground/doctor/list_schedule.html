@@ -43,7 +43,7 @@
                     <p>年龄：{{el.age}}</p>
                     <p>预约时间：{{el.create_time | date("yyyy-MM-dd HH:mm")}}</p>
                     <p>
-                        <a href="javascript:void(0)" ms-click="treat(el.id)" class="btn btn-primary" role="button">叫号</a>
+                        <a href="javascript:void(0)" ms-click="treat(el.appointment_id,el.id,el.priority)" class="btn btn-primary" role="button">叫号</a>
                         <a href="#" class="btn btn-default" role="button">Button</a>
                     </p>
                 </div>
@@ -74,6 +74,7 @@
                     }
                 });
             },
+            //查询
             query: function () {
                 $.ajax({
                     url: "fore/schedule/getAll",
@@ -84,10 +85,10 @@
                     }
                 });
             },
-            treat: function(patient_id) {
-                console.log(patient_id);
-                localStorage.removeItem("patient_id");
-                localStorage.setItem("patient_id",patient_id);
+            //叫号
+            treat: function(appointment_id,patient_id,priority) {
+                localStorage.removeItem("appointment");
+                localStorage.setItem("appointment",JSON.stringify({"appointment_id":appointment_id,"patient_id":patient_id,"priority":priority}));
                 window.location.href="/HIS/foreground/doctor/patient_record.html";
             }
         });

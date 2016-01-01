@@ -58,3 +58,14 @@ create TABLE appointment (
     create_time TIMESTAMP not null default CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
 );
+
+/***  药  ****/
+CREATE TABLE drug
+(
+  id int AUTO_INCREMENT PRIMARY KEY ,
+  drug_name VARCHAR(40) DEFAULT '' NOT NULL,
+  drug_price REAL NOT NULL,
+  drug_type VARCHAR(40),
+  drug_comment LONGTEXT,
+  product_time DATETIME
+);

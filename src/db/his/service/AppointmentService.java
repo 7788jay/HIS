@@ -34,4 +34,19 @@ public class AppointmentService {
         }
         return patientDTOs;
     }
+
+    /**
+     *
+     * @param property
+     * @param value
+     * @param appointment_id
+     * @throws SQLException
+     */
+    public void update(String property,String value,String appointment_id) {
+        try {
+            appointmentDao.update(property,value,appointment_id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

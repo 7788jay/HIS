@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>病历书写</title>
+    <title>开立医嘱</title>
 
     <link rel="stylesheet" href="/HIS/plugin/bootstrap/css/bootstrap.css"/>
     <link href="/HIS/css/lrtk.css" type="text/css" rel="stylesheet">
@@ -38,8 +38,9 @@
             </div>
             <ul class="nav navbar-nav">
                 <li><a href="##">首页</a></li>
-                <li class="active"><a href="##">病历书写</a></li>
+                <li><a href="##">病历书写</a></li>
                 <li><a href="javascript:void(0)" ms-click="recipe">开立处方</a></li>
+                <li class="active"><a href="#?">开立医嘱</a></li>
             </ul>
             <p class="navbar-text navbar-right"><a href="/HIS/foreground/login.jsp" class="navbar-link">注销 </a> </p>
             <p class="navbar-text navbar-right">欢迎：{{userName}}</p>
@@ -48,14 +49,14 @@
     <div class="row">
         <div class="panel panel-default">
             <!-- Default panel contents -->
-            <div class="panel-heading"><h3 class="text-center">住院病历</h3></div>
+            <div class="panel-heading"><h3 class="text-center">开立医嘱</h3></div>
             <!-- Table -->
             <table class="table">
                 <tr>
                     <td colspan="4" class="text-right">
                         <a class="btn btn-warning" ms-click="updatePriority">延后诊断</a>
                         <a class="btn btn-success" ms-click="updateStatus">结束诊断</a>
-                        <a class="btn btn-info" ms-click="save">保存</a>
+                        <a class="btn btn-info" ms-click="save">保存医嘱</a>
                     </td>
                 </tr>
                 <tr>
@@ -68,28 +69,32 @@
                     <td class="text-right">主诉: </td>
                     <td colspan="3"><input class="form-control"/></td>
                 </tr>
-
+                <tr>
+                    <td class="text-right">医嘱类型: </td>
+                    <td>
+                       <select>
+                           <option value="0">临时医嘱</option>
+                           <option value="1">长期医嘱</option>
+                       </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right">已选择的药品：</td>
+                    <td colspan="2">
+                        <div ms-repeat="selected">
+                            {{el.drug_name}}   {{el.amount}}  {{el.unit}}  <a ms-click="$remove" class="glyphicon glyphicon-remove"></a>
+                        </div>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="text-right">病症:</td>
+                    <td colspan="2">
+                        <textarea class="form-control" ms-duplex="comment"></textarea>
+                    </td>
+                    <td></td>
+                </tr>
             </table>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3" id="sidebarMenu">
-            <ul class="nav nav-pills nav-stacked" data-spy="affix" data-offset-top="200">
-                <li class="active"><a href="#section-1">现病史</a></li>
-                <li><a href="#section-2">既往史</a></li>
-                <li><a href="#section-3">个人史</a></li>
-                <li><a href="#section-4">体格检查</a></li>
-                <li><a href="#section-5">初步诊断</a></li>
-            </ul>
-        </div>
-        <div class="col-md-9">
-            <div class="panel panel-default panel-info" ms-repeat="data" ms-attr-id="section-{{$index+1}}">
-                <div class="panel-heading">{{el.name | name}}</div>
-                <div class="panel-body">
-                    <textarea style="font-size: 20px" class="form-control" rows="7" ms-attr-value="el.comment"></textarea>
-                </div>
-                <div class="panel-footer">修改人：{{el.modifier}}</div>
-            </div>
         </div>
     </div>
 </div>
@@ -102,9 +107,16 @@
             $id: "record",
             userName: "",
             patient_id: "",
-            data:[],
-            patient: {},       //病人信息
-            appointment_id: "",//挂号id
+            priority: "",
+            amount: 1,
+            unit: "盒",
+            data:[],       //处方数据
+            patient: {},   //病人信息
+            appointment_id: "",//挂号编号
+            drug:[],     //药品信息
+            selected: [],
+            drugName: "",
+            comment: "",   //病症
             //获取用户
             init: function(){
                 $.ajax({
@@ -125,6 +137,30 @@
                         vm.patient = data;
                     }
                 });
+                $.ajax({
+                    url: "/HIS/fore/recipe/queryDrug",
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        vm.drug = data;
+                    }
+                });
+            },
+            //添加药品
+            add: function(){
+                var code = $('select[name="drug"]').val();
+                var name = $('select[name="drug"]').find("option:selected").text();
+                if(code==0){
+                    layer.msg("请选择药品！");
+                    return;
+                }
+                if(vm.amount==0){
+                    layer.msg("请填写数量！");
+                    return;
+                }
+                vm.selected.push({'drug_code':code,'drug_name':name,'amount':vm.amount,'unit':vm.unit});
+                $('select[name="drug"]').val(0);
             },
             //查询
             query: function () {
@@ -170,43 +206,31 @@
             },
             //保存
             save: function(){
-                var data = vm.data;
-                data.forEach(function(v,i){
-                    var text = $('textarea').eq(i).val();
-                    if(text!=v['comment']){
-                        data[i].comment=text;
-                        data[i].modifier = vm.userName;
-                    }
-                });
-                console.log(data);
+//                var data = vm.data;
+//                data.forEach(function(v,i){
+//                    var text = $('textarea').eq(i).val();
+//                    if(text!=v['comment']){
+//                        data[i].comment=text;
+//                        data[i].modifier = vm.userName;
+//                    }
+//                });
+//                console.log(data);
+                var params = "patient_id="+vm.patient_id+"&comment="+vm.comment;
                 $.ajax({
-                    url: "/HIS/fore/file/add",
+                    url: "/HIS/fore/recipe/insert?"+params,
                     type: "POST",
                     contentType:"application/json",
-                    data: JSON.stringify(data),
+                    data: JSON.stringify(vm.selected),
                     dataType: "json",
                     success: function (data) {
                         console.log(data);
                         layer.alert(data.message);
-                        vm.query();
                     }
                 })
             },
             //跳转到开立处方
             recipe: function(){
-                var flag = true;
-                vm.data.forEach(function(v,i){
-                    var text = $('textarea').eq(i).val();
-                    if(text!=v['comment']){
-                        flag = false;
-                    }
-                });
-                if(!flag){
-                    layer.confirm("病历还没保存，是否跳转？",
-                            function (){
-                                window.location.href= "/HIS/foreground/doctor/patient_recipe.html";
-                            })
-                }else{
+                if(layer.confirm("病历还没保存，是否跳转？")){
                     window.location.href= "/HIS/foreground/doctor/patient_recipe.html";
                 }
             }
