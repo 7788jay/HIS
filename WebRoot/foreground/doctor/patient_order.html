@@ -11,6 +11,7 @@
     <script type="text/javascript" src="/HIS/js/doctor.js"></script>
     <script type="text/javascript" src="/HIS/plugin/avalon/avalon.js"></script>
     <script type="text/javascript" src="/HIS/plugin/bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/HIS/plugin/laydate/laydate.js"></script>
     <!--样式区-->
     <style>
         .ms-controller, .ms-important, [ms-controller], [ms-important] {
@@ -29,7 +30,7 @@
     </style>
 </head>
 
-<body ms-controller="record" data-spy="scroll" data-target="#sidebarMenu">
+<body ms-controller="order">
 <div class="container">
     <div class="row">
         <div class="navbar navbar-default navbar-static-top col-md-12" role="navigation">
@@ -60,8 +61,8 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>姓名: <u>{{patient.name}}</u></td>
-                    <td>性别: <u>{{patient.sex}}</u></td>
+                    <td width="25%">姓名: <u>{{patient.name}}</u></td>
+                    <td width="15%">性别: <u>{{patient.sex}}</u></td>
                     <td>年龄: <u>{{patient.age}}</u></td>
                     <td>编号: <u>{{appointment_id}}</u></td>
                 </tr>
@@ -72,27 +73,47 @@
                 <tr>
                     <td class="text-right">医嘱类型: </td>
                     <td>
-                       <select>
-                           <option value="0">临时医嘱</option>
-                           <option value="1">长期医嘱</option>
+                       <select class="form-control" ms-duplex="type">
+                           <option>临时医嘱</option>
+                           <option>长期医嘱</option>
                        </select>
                     </td>
-                </tr>
-                <tr>
-                    <td class="text-right">已选择的药品：</td>
-                    <td colspan="2">
-                        <div ms-repeat="selected">
-                            {{el.drug_name}}   {{el.amount}}  {{el.unit}}  <a ms-click="$remove" class="glyphicon glyphicon-remove"></a>
-                        </div>
+                    <td>
+                        <input type="text" class="form-control" onclick="laydate({min: laydate.now()})" id="start" placeholder="请选择开始时间">
                     </td>
-                    <td></td>
+                    <td>
+                    <input type="text" class="form-control" onclick="laydate({min: laydate.now()})" id="end" placeholder="请选择开始时间">
+                    </td>
                 </tr>
                 <tr>
-                    <td class="text-right">病症:</td>
+                    <td class="text-right">医嘱内容:</td>
                     <td colspan="2">
                         <textarea class="form-control" ms-duplex="comment"></textarea>
                     </td>
-                    <td></td>
+                    <td><a class="btn btn-info" ms-click="add">添加</a></td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <div class="panel panel-default">
+                            <!-- Default panel contents -->
+                            <div class="panel-heading"><h5 class="text-center">医嘱内容</h5></div>
+                            <!-- Table -->
+                            <table class="table">
+                                <tr>
+                                    <td>医嘱类型</td>
+                                    <td>医嘱内容</td>
+                                    <td>开始时间</td>
+                                    <td>结束时间</td>
+                                </tr>
+                                <tr ms-repeat="add_comment">
+                                    <td>{{el.type}}</td>
+                                    <td>{{el.start_time}}</td>
+                                    <td>{{el.end_time}}</td>
+                                    <td>{{el.comment}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
                 </tr>
             </table>
         </div>
@@ -104,19 +125,17 @@
 
     avalon.ready(function () {
         var vm = avalon.define({
-            $id: "record",
-            userName: "",
-            patient_id: "",
-            priority: "",
-            amount: 1,
-            unit: "盒",
-            data:[],       //处方数据
-            patient: {},   //病人信息
-            appointment_id: "",//挂号编号
-            drug:[],     //药品信息
-            selected: [],
+            $id: "order",
+            userName: "",       //用户名
+            patient_id: "",     //病人id
+            priority: "",       //编号
+            type: "临时医嘱",           //医嘱类型
+            data:[],            //医嘱数据
+            patient: {},        //病人信息
+            appointment_id: "", //挂号编号
+            add_comment: [],    //添加的医嘱
             drugName: "",
-            comment: "",   //病症
+            comment: "",    //医嘱内容
             //获取用户
             init: function(){
                 $.ajax({
@@ -147,20 +166,20 @@
                     }
                 });
             },
-            //添加药品
+            //添加医嘱
             add: function(){
-                var code = $('select[name="drug"]').val();
-                var name = $('select[name="drug"]').find("option:selected").text();
-                if(code==0){
-                    layer.msg("请选择药品！");
+                var start_time = $('#start').val();
+                var end_time = $('#start').val();
+                if(start_time==''){
+                    layer.msg("请选择开始时间！");
                     return;
                 }
-                if(vm.amount==0){
-                    layer.msg("请填写数量！");
+                if(end_time==''){
+                    layer.msg("请选择结束时间！");
                     return;
                 }
-                vm.selected.push({'drug_code':code,'drug_name':name,'amount':vm.amount,'unit':vm.unit});
-                $('select[name="drug"]').val(0);
+                vm.add_comment.push({'type':vm.type,'start_time':start_time,'end_time':end_time,'comment':vm.comment});
+                vm.comment = "";
             },
             //查询
             query: function () {
@@ -206,6 +225,7 @@
             },
             //保存
             save: function(){
+                alert($('#start').val());
 //                var data = vm.data;
 //                data.forEach(function(v,i){
 //                    var text = $('textarea').eq(i).val();
@@ -216,17 +236,17 @@
 //                });
 //                console.log(data);
                 var params = "patient_id="+vm.patient_id+"&comment="+vm.comment;
-                $.ajax({
-                    url: "/HIS/fore/recipe/insert?"+params,
-                    type: "POST",
-                    contentType:"application/json",
-                    data: JSON.stringify(vm.selected),
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        layer.alert(data.message);
-                    }
-                })
+//                $.ajax({
+//                    url: "/HIS/fore/recipe/insert?"+params,
+//                    type: "POST",
+//                    contentType:"application/json",
+//                    data: JSON.stringify(vm.selected),
+//                    dataType: "json",
+//                    success: function (data) {
+//                        console.log(data);
+//                        layer.alert(data.message);
+//                    }
+//                })
             },
             //跳转到开立处方
             recipe: function(){
