@@ -65,8 +65,8 @@
                     <td>编号: <u>{{appointment_id}}</u></td>
                 </tr>
                 <tr>
-                    <td class="text-right" ms-duplex="complained">主诉: </td>
-                    <td colspan="3"><input class="form-control"/></td>
+                    <td class="text-right">主诉: </td>
+                    <td colspan="3"><input class="form-control" ms-duplex-string="complained"/></td>
                 </tr>
 
             </table>
@@ -124,6 +124,7 @@
                     success: function (data) {
                         console.log(data);
                         vm.patient = data;
+                        vm.complained = data.complained;
                     }
                 });
             },
@@ -179,9 +180,8 @@
                         data[i].modifier = vm.userName;
                     }
                 });
-                console.log(data);
                 $.ajax({
-                    url: "/HIS/fore/file/add",
+                    url: "/HIS/fore/file/add?complained="+vm.complained,
                     type: "POST",
                     contentType:"application/json",
                     data: JSON.stringify(data),

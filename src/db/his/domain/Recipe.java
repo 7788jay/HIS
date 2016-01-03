@@ -17,6 +17,8 @@ public class Recipe {
     private String patient_id;
     //病症
     private String comment;
+    //预约编号
+    private String appointment_id;
 
     public String getRecipe_id() {
         return recipe_id;
@@ -56,5 +58,13 @@ public class Recipe {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getAppointment_id() {
+        return appointment_id;
+    }
+
+    public void setAppointment_id(String appointment_id) {
+        this.appointment_id = appointment_id;
     }
 }

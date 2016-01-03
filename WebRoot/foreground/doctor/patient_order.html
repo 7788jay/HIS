@@ -31,6 +31,7 @@
                 <li><a href="javascript:void(0)" ms-click="record">病历书写</a></li>
                 <li><a href="javascript:void(0)" ms-click="recipe">开立处方</a></li>
                 <li class="active"><a href="#?">开立医嘱</a></li>
+                <li><a href="preview.html">记录预览</a></li>
             </ul>
             <p class="navbar-text navbar-right"><a href="/HIS/foreground/login.jsp" class="navbar-link">注销 </a> </p>
             <p class="navbar-text navbar-right">欢迎：{{userName}}</p>
@@ -57,7 +58,9 @@
                 </tr>
                 <tr>
                     <td class="text-right">主诉: </td>
-                    <td colspan="3"><input class="form-control"/></td>
+                    <td colspan="3">
+                        <input class="form-control" ms-attr-value="{{patient.complained}}"/>
+                    </td>
                 </tr>
                 <tr>
                     <td class="text-right">医嘱类型: </td>

@@ -50,6 +50,17 @@ public class PatientDao {
         return patient;
     }
 
+    /**
+     * 修改病人主诉
+     * @param patient
+     * @throws SQLException
+     */
+    public void update(Patient patient) throws SQLException {
+        String sql = "update patient set complained = ? where id = ?";
+        Object[] params = new Object[]{patient.getComplained(),patient.getId()};
+        qr.update(sql,params);
+    }
+
 
 //    /**
 //     * 根据用户名获取医生

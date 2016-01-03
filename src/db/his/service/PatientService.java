@@ -56,4 +56,13 @@ public class PatientService {
     public Patient queryPatientById(String id) throws SQLException {
         return patientDao.queryPatientById(id);
     }
+
+    /**
+     * 修改病人主诉
+     * @param patient
+     * @throws SQLException
+     */
+    public void update(Patient patient) throws SQLException {
+        patientDao.update(patient);
+    }
 }

@@ -1,8 +1,10 @@
 package db.his.web.controller.foreground;
 
 import db.his.domain.Doctor;
+import db.his.domain.Patient;
 import db.his.domain.PatientFile;
 import db.his.service.PatientFileService;
+import db.his.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -24,16 +26,23 @@ import java.util.List;
 public class PatientFileController {
     @Autowired
     private PatientFileService patientFileService;
+    @Autowired
+    private PatientService patientService;
 
     /**
      * 添加病人的病历
-     * @param patientFiles
+     * @param complained 主诉
+     * @param patientFiles 病历信息
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "/add")
-    public ModelMap add(@RequestBody PatientFile[] patientFiles) {
+    public ModelMap add(String complained,@RequestBody PatientFile[] patientFiles) {
         try {
+            Patient patient = new Patient();
+            patient.setId(patientFiles[0].getPatient_id());
+            patient.setComplained(complained);
+            patientService.update(patient);
             patientFileService.batchInsert(Arrays.asList(patientFiles));
         } catch (SQLException e) {
             e.printStackTrace();

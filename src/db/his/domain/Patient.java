@@ -5,24 +5,26 @@ package db.his.domain;
  */
 public class Patient {
 
-   private String id;
-   private String record_id;
+    private String id;
+    private String record_id;
     //病历id
-   private String file_id;
+    private String file_id;
     //医保
-   private String insurance_id;
-   private String operation_consent_id;
+    private String insurance_id;
+    private String operation_consent_id;
     //姓名
-   private String name;
+    private String name;
     //性别
-   private String sex;
+    private String sex;
     //年龄
-   private String age;
+    private String age;
     //密码
-   private String password;
+    private String password;
+    //主诉
+    private String complained;
 
-   private String card_id;
-   private String case_id;
+    private String card_id;
+    private String case_id;
 
     public String getId() {
         return id;
@@ -110,6 +112,14 @@ public class Patient {
 
     public void setCase_id(String case_id) {
         this.case_id = case_id;
+    }
+
+    public String getComplained() {
+        return complained;
+    }
+
+    public void setComplained(String complained) {
+        this.complained = complained;
     }
 
     public Patient() {
