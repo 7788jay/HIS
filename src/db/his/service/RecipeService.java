@@ -20,12 +20,21 @@ public class RecipeService {
     private RecipeDao recipeDao;
 
     /**
-     *
+     * 根据预约编号，医生id及病人id获取病历内容
+     * @param recipe
+     * @return
+     * @throws SQLException
+     */
+    public List<Recipe_Treatment> queryOne(Recipe recipe) throws SQLException {
+        return recipeDao.queryOne(recipe);
+    }
+
+    /**
+     *获取所有药品用于选择
      * @return drugs
      * @throws SQLException
      */
     public List<Drug> queryDrug() throws SQLException {
-
         return recipeDao.queryAll();
     }
 

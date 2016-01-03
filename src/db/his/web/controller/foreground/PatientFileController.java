@@ -42,7 +42,9 @@ public class PatientFileController {
             Patient patient = new Patient();
             patient.setId(patientFiles[0].getPatient_id());
             patient.setComplained(complained);
+            //更新病人信息
             patientService.update(patient);
+            //批量插入病人病历信息
             patientFileService.batchInsert(Arrays.asList(patientFiles));
         } catch (SQLException e) {
             e.printStackTrace();
@@ -59,6 +61,7 @@ public class PatientFileController {
     @ResponseBody
     @RequestMapping(value = "/queryOne")
     public List<PatientFile> queryOne(String patient_id, HttpSession session){
+        //从session中获取医生信息
         Doctor doctor = (Doctor) session.getAttribute("user");
         return patientFileService.queryOne(patient_id,doctor);
     }

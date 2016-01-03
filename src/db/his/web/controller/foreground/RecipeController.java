@@ -29,6 +29,24 @@ public class RecipeController {
     private RecipeService recipeService;
 
     /**
+     * 获取已保存的病历
+     * @param recipe
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/queryOne")
+    public List<Recipe_Treatment> queryOne(Recipe recipe,HttpSession session){
+        try {
+            Doctor doctor = (Doctor) session.getAttribute("user");
+            recipe.setDoctor_id(doctor.getDoctor_id());
+            return recipeService.queryOne(recipe);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
      * 查询药品
      * @return
      */

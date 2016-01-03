@@ -1,6 +1,5 @@
 package db.his.dao;
 
-import db.his.domain.Appointment;
 import db.his.domain.Drug;
 import db.his.domain.Recipe;
 import db.his.domain.Recipe_Treatment;
@@ -20,17 +19,20 @@ import java.util.List;
 public class RecipeDao {
     QueryRunner qr=new QueryRunner(JdbcUtil.getDataSources());
 
-    public List<Recipe_Treatment> queryOne(Appointment appointment){
-        String sql = "SELECT\n" +
-                    "	rt.*\n" +
-                    "FROM\n" +
-                    "	recipe_treatment rt\n" +
+    /**
+     * 根据预约编号，医生id及病人id获取病历内容
+     * @param recipe
+     * @return
+     */
+    public List<Recipe_Treatment> queryOne(Recipe recipe) throws SQLException {
+        String sql = "SELECT rt.*\n" +
+                    "FROM recipe_treatment rt\n" +
                     "LEFT JOIN recipe r ON r.recipe_id = rt.recipe_id\n" +
-                    "WHERE\n" +
-                    "	r.patient_id = ?\n" +
+                    "WHERE r.patient_id = ?\n" +
                     "	AND r.doctor_id=?\n" +
                     "	AND r.appointment_id = ?;";
-        return null;
+        Object[] params = new Object[]{recipe.getPatient_id(),recipe.getDoctor_id(),recipe.getAppointment_id()};
+        return (List<Recipe_Treatment>) qr.query(sql,params,new BeanListHandler(Recipe_Treatment.class));
     }
 
     /**
@@ -62,4 +64,5 @@ public class RecipeDao {
         }
         qr.batch(sql,rts_params);
     }
+
 }

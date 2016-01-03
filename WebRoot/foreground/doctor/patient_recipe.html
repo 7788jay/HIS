@@ -26,10 +26,11 @@
                 　 <a href="##" class="navbar-brand">HIS</a>
             </div>
             <ul class="nav navbar-nav">
-                <li><a href="##">首页</a></li>
+                <li><a href="javascript:void(0)">首页</a></li>
                 <li><a href="javascript:void(0)" ms-click="record">病历书写</a></li>
                 <li class="active"><a href="javascript:void(0)">开立处方</a></li>
                 <li><a href="javascript:void(0)" ms-click="order">开立医嘱</a></li>
+                <li><a href="preview.html">记录预览</a></li>
             </ul>
             <p class="navbar-text navbar-right"><a href="/HIS/foreground/login.jsp" class="navbar-link">注销 </a> </p>
             <p class="navbar-text navbar-right">欢迎：{{userName}}</p>
@@ -102,6 +103,24 @@
                     </td>
                     <td></td>
                 </tr>
+                <tr>
+                    <td class="text-right">保存的处方:</td>
+                    <td colspan="2">
+                        <table class="table">
+                            <tr>
+                                <td>药品名</td>
+                                <td>药品数量</td>
+                                <td>药品单位</td>
+                            </tr>
+                            <tr ms-repeat="data">
+                                <td>{{el.drug_name}}</td>
+                                <td>{{el.amount}}</td>
+                                <td>{{el.unit}}</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td></td>
+                </tr>
             </table>
         </div>
     </div>
@@ -170,17 +189,16 @@
                 $('select[name="drug"]').val(0);
             },
             //查询
-//            query: function () {
-//                $.ajax({
-//                    url: "/HIS/fore/file/queryOne?patient_id="+vm.patient_id,
-//                    type: "GET",
-//                    dataType: "json",
-//                    success: function (data) {
-//                        console.log(data);
-//                        vm.data = data;
-//                    }
-//                })
-//            },
+            query: function () {
+                $.ajax({
+                    url: "/HIS/fore/recipe/queryOne?patient_id="+vm.patient_id+"&appointment_id="+vm.appointment_id,
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        vm.data = data;
+                    }
+                })
+            },
             //结束诊断
             updateStatus: function(){
                 $.ajax({
@@ -221,34 +239,39 @@
                     data: JSON.stringify(vm.selected),
                     dataType: "json",
                     success: function (data) {
-                        console.log(data);
                         layer.alert(data.message);
+                        vm.query();
+                        vm.selected = [];
                     }
                 })
             },
             //跳转到病历
             record: function(){
-                layer.confirm("处方还没保存，是否跳转？",function(){
+                if(vm.selected.length!=0){
+                    layer.confirm("处方还没保存，是否跳转？",function(){
+                        window.location.href= "/HIS/foreground/doctor/patient_record.html";
+                    })
+                }else {
                     window.location.href= "/HIS/foreground/doctor/patient_record.html";
-                })
+                }
             },
             //跳转到开立医嘱
             order: function(){
-                layer.confirm("处方还没保存，是否跳转？",function (){
-                            window.location.href= "/HIS/foreground/doctor/patient_order.html";
-                })
+                if(vm.selected.length!=0){
+                    layer.confirm("处方还没保存，是否跳转？",function (){
+                        window.location.href= "/HIS/foreground/doctor/patient_order.html";
+                    })
+                }else {
+                    window.location.href= "/HIS/foreground/doctor/patient_order.html";
+                }
             }
         });
-        avalon.filters.name=function(str){
-            var map = {"present":"现病史","past":"既往史","person":"个人史","exam":"体格检查","diagnosis":"初步诊断"};
-            return map[str];
-        };
         avalon.scan();
         var appointment = JSON.parse(localStorage.getItem("appointment"));
         vm.patient_id = appointment.patient_id;
         vm.appointment_id = appointment.appointment_id;
         vm.init();
-//        vm.query();
+        vm.query();
     });
 
 </script>

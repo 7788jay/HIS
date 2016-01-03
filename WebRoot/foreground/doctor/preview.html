@@ -27,9 +27,9 @@
                 　 <a href="##" class="navbar-brand">HIS</a>
             </div>
             <ul class="nav navbar-nav">
-                <li><a href="##">首页</a></li>
-                <li><a href="javascript:void(0)" ms-click="record">病历书写</a></li>
-                <li><a href="javascript:void(0)" ms-click="recipe">开立处方</a></li>
+                <li><a href="list_schedule.html">首页</a></li>
+                <li><a href="patient_record.html">病历书写</a></li>
+                <li><a href="patient_recipe.html">开立处方</a></li>
                 <li><a href="patient_order.html">开立医嘱</a></li>
                 <li class="active"><a href="#?">记录预览</a></li>
             </ul>
@@ -76,6 +76,28 @@
                     <td colspan="4">
                         <div class="panel panel-default">
                             <!-- Default panel contents -->
+                            <div class="panel-heading"><h6 class="text-center">处方内容</h6></div>
+                            <!-- Table -->
+                            <table class="table">
+                                <tr>
+                                    <td>药品名</td>
+                                    <td>药品数量</td>
+                                    <td>药品单位</td>
+                                </tr>
+                                <tr ms-repeat="recipe_data">
+                                    <td>{{el.drug_name}}</td>
+                                    <td>{{el.amount}}</td>
+                                    <td>{{el.unit}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <!--医嘱-->
+                    <td colspan="4">
+                        <div class="panel panel-default">
+                            <!-- Default panel contents -->
                             <div class="panel-heading"><h6 class="text-center">医嘱内容</h6></div>
                             <!-- Table -->
                             <table class="table">
@@ -84,14 +106,12 @@
                                     <td>开始时间</td>
                                     <td>结束时间</td>
                                     <td>医嘱内容</td>
-                                    <td>操作</td>
                                 </tr>
                                 <tr ms-repeat="order_data">
                                     <td>{{el.type}}</td>
                                     <td>{{el.start_time|date}}</td>
                                     <td>{{el.end_time|date}}</td>
                                     <td>{{el.comment}}</td>
-                                    <td><a href="javascript:void(0)" ms-click="$remove">删除</a></td>
                                 </tr>
                             </table>
                         </div>
@@ -155,8 +175,16 @@
                     type: "GET",
                     dataType: "json",
                     success: function (data) {
-                        console.log(data);
                         vm.record_data = data;
+                    }
+                });
+                //处方
+                $.ajax({
+                    url: "/HIS/fore/recipe/queryOne?patient_id="+vm.patient_id+"&appointment_id="+vm.appointment_id,
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        vm.recipe_data = data;
                     }
                 })
             },
@@ -189,7 +217,7 @@
                         });
                     }
                 })
-            },
+            }
         });
         avalon.filters.name=function(str){
             var map = {"present":"现病史","past":"既往史","person":"个人史","exam":"体格检查","diagnosis":"初步诊断"};
@@ -199,7 +227,6 @@
         var appointment = JSON.parse(localStorage.getItem("appointment"));
         vm.patient_id = appointment.patient_id;
         vm.appointment_id = appointment.appointment_id;
-        console.log(vm.appointment_id)
         vm.init();
         vm.query();
     });
