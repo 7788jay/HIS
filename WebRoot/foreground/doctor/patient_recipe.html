@@ -38,7 +38,7 @@
             </div>
             <ul class="nav navbar-nav">
                 <li><a href="##">首页</a></li>
-                <li><a href="##">病历书写</a></li>
+                <li><a href="javascript:void(0)" ms-click="record">病历书写</a></li>
                 <li class="active"><a href="javascript:void(0)">开立处方</a></li>
                 <li><a href="javascript:void(0)" ms-click="order">开立医嘱</a></li>
             </ul>
@@ -224,15 +224,6 @@
             },
             //保存
             save: function(){
-//                var data = vm.data;
-//                data.forEach(function(v,i){
-//                    var text = $('textarea').eq(i).val();
-//                    if(text!=v['comment']){
-//                        data[i].comment=text;
-//                        data[i].modifier = vm.userName;
-//                    }
-//                });
-//                console.log(data);
                 var params = "patient_id="+vm.patient_id+"&comment="+vm.comment;
                 $.ajax({
                     url: "/HIS/fore/recipe/insert?"+params,
@@ -246,18 +237,17 @@
                     }
                 })
             },
-            //跳转到开立处方
-            recipe: function(){
-                if(layer.confirm("病历还没保存，是否跳转？")){
-                    window.location.href= "/HIS/foreground/doctor/patient_recipe.html";
-                }
+            //跳转到病历
+            record: function(){
+                layer.confirm("处方还没保存，是否跳转？",function(){
+                    window.location.href= "/HIS/foreground/doctor/patient_record.html";
+                })
             },
             //跳转到开立医嘱
             order: function(){
-                layer.confirm("处方还没保存，是否跳转？",
-                        function (){
+                layer.confirm("处方还没保存，是否跳转？",function (){
                             window.location.href= "/HIS/foreground/doctor/patient_order.html";
-                        })
+                })
             }
         });
         avalon.filters.name=function(str){

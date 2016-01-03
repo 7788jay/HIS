@@ -2,7 +2,6 @@
 <html>
 <head>
     <title>开立医嘱</title>
-
     <link rel="stylesheet" href="/HIS/plugin/bootstrap/css/bootstrap.css"/>
     <link href="/HIS/css/lrtk.css" type="text/css" rel="stylesheet">
     <script type="text/javascript" src="/HIS/js/manager.js"></script>
@@ -17,16 +16,6 @@
         .ms-controller, .ms-important, [ms-controller], [ms-important] {
             visibility: hidden;
         }
-        .affix {
-            top: 30px;
-            width: 213px;
-        }
-        @media (min-width: 1200px) {
-            .affix {
-                top: 30px;
-                width: 263px;
-            }
-        }
     </style>
 </head>
 
@@ -39,7 +28,7 @@
             </div>
             <ul class="nav navbar-nav">
                 <li><a href="##">首页</a></li>
-                <li><a href="##">病历书写</a></li>
+                <li><a href="javascript:void(0)" ms-click="record">病历书写</a></li>
                 <li><a href="javascript:void(0)" ms-click="recipe">开立处方</a></li>
                 <li class="active"><a href="#?">开立医嘱</a></li>
             </ul>
@@ -101,15 +90,17 @@
                             <table class="table">
                                 <tr>
                                     <td>医嘱类型</td>
-                                    <td>医嘱内容</td>
                                     <td>开始时间</td>
                                     <td>结束时间</td>
+                                    <td>医嘱内容</td>
+                                    <td>操作</td>
                                 </tr>
                                 <tr ms-repeat="add_comment">
                                     <td>{{el.type}}</td>
-                                    <td>{{el.start_time}}</td>
-                                    <td>{{el.end_time}}</td>
+                                    <td>{{el.start_time|date}}</td>
+                                    <td>{{el.end_time|date}}</td>
                                     <td>{{el.comment}}</td>
+                                    <td><a href="javascript:void(0)" ms-click="$remove">删除</a></td>
                                 </tr>
                             </table>
                         </div>
@@ -134,7 +125,6 @@
             patient: {},        //病人信息
             appointment_id: "", //挂号编号
             add_comment: [],    //添加的医嘱
-            drugName: "",
             comment: "",    //医嘱内容
             //获取用户
             init: function(){
@@ -156,20 +146,11 @@
                         vm.patient = data;
                     }
                 });
-                $.ajax({
-                    url: "/HIS/fore/recipe/queryDrug",
-                    type: "GET",
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        vm.drug = data;
-                    }
-                });
             },
             //添加医嘱
             add: function(){
                 var start_time = $('#start').val();
-                var end_time = $('#start').val();
+                var end_time = $('#end').val();
                 if(start_time==''){
                     layer.msg("请选择开始时间！");
                     return;
@@ -178,18 +159,22 @@
                     layer.msg("请选择结束时间！");
                     return;
                 }
+                if(vm.comment==''){
+                    layer.msg("请填写医嘱内容！");
+                    return;
+                }
                 vm.add_comment.push({'type':vm.type,'start_time':start_time,'end_time':end_time,'comment':vm.comment});
                 vm.comment = "";
             },
             //查询
             query: function () {
                 $.ajax({
-                    url: "/HIS/fore/file/queryOne?patient_id="+vm.patient_id,
+                    url: "/HIS/fore/order/queryAll?patient_id="+vm.patient_id+"&id="+vm.appointment_id,
                     type: "GET",
                     dataType: "json",
                     success: function (data) {
-                        console.log(data);
                         vm.data = data;
+                        vm.add_comment = data;
                     }
                 })
             },
@@ -225,45 +210,47 @@
             },
             //保存
             save: function(){
-                alert($('#start').val());
-//                var data = vm.data;
-//                data.forEach(function(v,i){
-//                    var text = $('textarea').eq(i).val();
-//                    if(text!=v['comment']){
-//                        data[i].comment=text;
-//                        data[i].modifier = vm.userName;
-//                    }
-//                });
-//                console.log(data);
-                var params = "patient_id="+vm.patient_id+"&comment="+vm.comment;
-//                $.ajax({
-//                    url: "/HIS/fore/recipe/insert?"+params,
-//                    type: "POST",
-//                    contentType:"application/json",
-//                    data: JSON.stringify(vm.selected),
-//                    dataType: "json",
-//                    success: function (data) {
-//                        console.log(data);
-//                        layer.alert(data.message);
-//                    }
-//                })
+                console.log(vm.add_comment);
+                var params = "patient_id="+vm.patient_id+"&id="+vm.appointment_id;
+                $.ajax({
+                    url: "/HIS/fore/order/add?"+params,
+                    type: "POST",
+                    contentType:"application/json",
+                    data: JSON.stringify(vm.add_comment),
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        layer.alert(data.message);
+                        vm.query();
+                    }
+                })
             },
             //跳转到开立处方
             recipe: function(){
-                if(layer.confirm("病历还没保存，是否跳转？")){
+                if(vm.data.length!=vm.add_comment.length){
+                    layer.confirm("医嘱还没保存，是否跳转？",function(){
+                        window.location.href= "/HIS/foreground/doctor/patient_recipe.html";
+                    })
+                }else{
                     window.location.href= "/HIS/foreground/doctor/patient_recipe.html";
+                }
+            },
+            //跳转到病历
+            record: function(){
+                if(vm.data.length!=vm.add_comment.length){
+                    layer.confirm("医嘱还没保存，是否跳转？",function(){
+                        window.location.href= "/HIS/foreground/doctor/patient_record.html";
+                    })
+                }else{
+                    window.location.href= "/HIS/foreground/doctor/patient_record.html";
                 }
             }
         });
-        avalon.filters.name=function(str){
-            var map = {"present":"现病史","past":"既往史","person":"个人史","exam":"体格检查","diagnosis":"初步诊断"};
-            return map[str];
-        };
         avalon.scan();
         var appointment = JSON.parse(localStorage.getItem("appointment"));
         vm.patient_id = appointment.patient_id;
         vm.appointment_id = appointment.appointment_id;
-        console.log(vm.appointment_id);
+        console.log(vm.appointment_id)
         vm.init();
         vm.query();
     });

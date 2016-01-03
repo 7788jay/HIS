@@ -39,12 +39,13 @@
                 <div class="caption">
                     <p>{{el.priority}}号</p>
                     <h3>{{el.name}}</h3>
+                    <p>编号：{{el.appointment_id}}</p>
                     <p>性别：{{el.sex}}</p>
                     <p>年龄：{{el.age}}</p>
                     <p>预约时间：{{el.create_time | date("yyyy-MM-dd HH:mm")}}</p>
                     <p>
                         <a href="javascript:void(0)" ms-click="treat(el.appointment_id,el.id,el.priority)" class="btn btn-primary" role="button">叫号</a>
-                        <a href="#" class="btn btn-default" role="button">Button</a>
+                        <a href="javascript:void(0)" class="btn btn-warning" ms-click="updatePriority(el.appointment_id)">延后诊断</a>
                     </p>
                 </div>
             </div>
@@ -90,6 +91,21 @@
                 localStorage.removeItem("appointment");
                 localStorage.setItem("appointment",JSON.stringify({"appointment_id":appointment_id,"patient_id":patient_id,"priority":priority}));
                 window.location.href="/HIS/foreground/doctor/patient_record.html";
+            },
+            //延后诊断
+            updatePriority: function(appointment_id){
+                $.ajax({
+                    url: "/HIS/fore/schedule/updatePriority?appointment_id="+appointment_id,
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        layer.alert(data.message,function(index){
+                            layer.close(index);
+                            window.location.href= "/HIS/foreground/doctor/list_schedule.html";
+                        });
+                    }
+                })
             }
         });
         avalon.scan();
