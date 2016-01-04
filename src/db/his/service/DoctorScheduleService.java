@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -73,11 +74,28 @@ public class DoctorScheduleService {
      * @throws SQLException
      */
     public List<DoctorSchedule> queryByDoc_id(String doctor_id) {
+        List<DoctorSchedule> doctorSchedules = new ArrayList<DoctorSchedule>();
         try {
-            return doctorScheduleDao.queryByDoc_id(doctor_id);
+            doctorSchedules = doctorScheduleDao.queryByDoc_id(doctor_id);
+            if(doctorSchedules.size()==0){
+                for(int i=0;i<7;i++) {
+                    DoctorSchedule d = new DoctorSchedule();
+                    d.setTime("0");
+                    d.setWeek(i+"");
+                    d.setSum(0);
+                    doctorSchedules.add(d);
+                }
+                for(int i=0;i<7;i++) {
+                    DoctorSchedule d = new DoctorSchedule();
+                    d.setTime("1");
+                    d.setWeek(i+"");
+                    d.setSum(0);
+                    doctorSchedules.add(d);
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return doctorSchedules;
     }
 }

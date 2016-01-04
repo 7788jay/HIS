@@ -1,11 +1,4 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: lwt
-  Date: 2015/12/6
-  Time: 19:09
-  To change this template use PatientFile | Settings | PatientFile Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String path = request.getContextPath();
@@ -49,6 +42,11 @@
             </div>
         </div>
         <input type="button" class="btn btn-lg btn-primary btn-block" ms-click="login" value="登录"/>
+            <div class="form-group" style="margin-top: 20px">
+                <div class="col-sm-4 col-sm-offset-9">
+                    <a class="btn btn-primary" href="login.jsp">后台登录</a>
+                 </div>
+            </div>
     </form>
 </div>
 </body>

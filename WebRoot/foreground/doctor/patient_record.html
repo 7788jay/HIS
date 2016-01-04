@@ -183,7 +183,7 @@
                     }
                 });
                 $.ajax({
-                    url: "/HIS/fore/file/add?complained="+vm.complained,
+                    url: "/HIS/fore/file/add?complained="+encodeURI(encodeURI(vm.complained)),
                     type: "POST",
                     contentType:"application/json",
                     data: JSON.stringify(data),

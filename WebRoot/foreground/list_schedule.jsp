@@ -82,7 +82,7 @@
                         <tr class="info">
                             <td>时间</td>
                             <td ms-repeat="order">
-                                {{month}}/{{day+$index}}<br/>
+                                {{month}}月/{{day+$index}}日<br/>
                                 {{week[el]}}
                             </td>
                         </tr>
@@ -124,6 +124,7 @@
             day: "",
             order: [],
             week: ["星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"],
+            //查询
             query: function () {
                 $.ajax({
                     url: "servlet/doctorSchedule/getAll",
@@ -134,6 +135,7 @@
                     }
                 });
             },
+            //预约
             appoint: function (d_num, offset, order) {
                 var schedule = ((vm.data)[d_num].doctorSchedules)[order];
                 console.log(offset);
@@ -160,7 +162,7 @@
         avalon.scan();
         vm.query();
         var date = new Date();
-        vm.month = date.getMonth();
+        vm.month = date.getMonth()+1;
         vm.day = date.getDate();
         var week = date.getDay();
         for (var i = 0; i < 7; i++) {

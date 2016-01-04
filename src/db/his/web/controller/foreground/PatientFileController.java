@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
@@ -37,11 +39,11 @@ public class PatientFileController {
      */
     @ResponseBody
     @RequestMapping(value = "/add")
-    public ModelMap add(String complained,@RequestBody PatientFile[] patientFiles) {
+    public ModelMap add(String complained,@RequestBody PatientFile[] patientFiles) throws UnsupportedEncodingException {
         try {
             Patient patient = new Patient();
             patient.setId(patientFiles[0].getPatient_id());
-            patient.setComplained(complained);
+            patient.setComplained(URLDecoder.decode(URLDecoder.decode(complained,"utf-8"),"utf-8"));
             //更新病人信息
             patientService.update(patient);
             //批量插入病人病历信息

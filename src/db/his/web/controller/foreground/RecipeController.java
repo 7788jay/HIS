@@ -29,7 +29,7 @@ public class RecipeController {
     private RecipeService recipeService;
 
     /**
-     * 获取已保存的病历
+     * 获取已保存的处方
      * @param recipe
      * @return
      */

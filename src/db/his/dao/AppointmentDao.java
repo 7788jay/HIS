@@ -34,7 +34,7 @@ public class AppointmentDao {
      * @return
      * @throws SQLException
      */
-    public List<PatientDTO> getAll(Appointment ap ) throws SQLException {
+    public List<PatientDTO> getAll(Appointment ap) throws SQLException {
         String sql = "SELECT\n" +
                 "	ap.id appointment_id,\n" +
                 "	ap.priority,\n" +
@@ -78,5 +78,15 @@ public class AppointmentDao {
         qr.update(sql,params);
     }
 
+    /**
+     * 根据条件查找预约记录
+     * @param appointment
+     * @return
+     */
+    public Appointment queryOne(Appointment appointment){
 
+        String sql = "";
+        return null;
+    }
 }
+
