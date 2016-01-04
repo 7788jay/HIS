@@ -4,8 +4,8 @@ package db.his.domain.enums;
  * Created by lwt on 2015/12/10.
  */
 public enum MessageEnum {
-    ADD_ERROR("0001","添加失败！"),
-    ADD_SUCCESS("0000","添加成功！");
+    ADD_ERROR("0001","注册失败！"),
+    ADD_SUCCESS("0000","注册成功！");
 
     private String code;
     private String name;

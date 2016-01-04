@@ -54,6 +54,17 @@ public class AppointmentController {
         appointmentService.update("status","1",appointment_id);
         return new ModelMap("message", "完成诊断！请选择下一位患者！");
     }
+    /**
+     * 取消预约
+     * @param appointment_id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/cancelAppointment")
+    public ModelMap cancelAppointment(String appointment_id){
+        appointmentService.update("status","-1",appointment_id);
+        return new ModelMap("message", "取消预约成功！");
+    }
 
     /**
      * 延后诊断

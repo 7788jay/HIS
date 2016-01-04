@@ -1,6 +1,7 @@
 package db.his.web.controller;
 
 import db.his.domain.Patient;
+import db.his.domain.dto.AppointmentDTO;
 import db.his.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,6 +21,22 @@ import java.util.Map;
 public class PatientServlet {
     @Autowired
     private PatientService patientService;
+
+    /**
+     * 查看病人预约列表
+     * @param patient_id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/queryAppointment")
+    public List<AppointmentDTO> queryAppointment(String patient_id){
+        try {
+            return patientService.queryAppointment(patient_id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     /**
      * 新增一个病人

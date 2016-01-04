@@ -19,7 +19,7 @@
 <body class="container" ms-controller="login">
 <div class="col-lg-4 col-lg-offset-3 col-sm-6 col-sm-offset-3 col-xs-8 col-xs-offset-2" id="login">
 
-    <form class="form-horizontal" role="form">
+    <div class="form-horizontal" role="form">
         <h2>HIS 登录</h2>
         <div class="form-group">
             <label for="inputName" class="col-sm-2 col-sm-offset-1 control-label">用户名</label>
@@ -42,6 +42,7 @@
             </div>
         </div>
         <input type="button" class="btn btn-lg btn-primary btn-block" ms-click="login" value="登录"/>
+        <a class="btn btn-lg btn-primary btn-block" href="foreground/register.jsp">注册</a>
             <div class="form-group" style="margin-top: 20px">
                 <div class="col-sm-4 col-sm-offset-9">
                     <a class="btn btn-primary" href="login.jsp">后台登录</a>

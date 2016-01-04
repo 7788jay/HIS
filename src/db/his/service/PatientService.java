@@ -2,12 +2,14 @@ package db.his.service;
 
 import db.his.dao.PatientDao;
 import db.his.domain.Patient;
+import db.his.domain.dto.AppointmentDTO;
 import db.his.domain.enums.MessageEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,6 +21,15 @@ public class PatientService {
 
     @Autowired
     private PatientDao patientDao;
+
+    /**
+     * 查看病人预约列表
+     * @param patient_id
+     * @return
+     */
+    public List<AppointmentDTO> queryAppointment(String patient_id) throws SQLException {
+        return patientDao.queryAppointment(patient_id);
+    }
 
     /**
      * 增加一个病人信息

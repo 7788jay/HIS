@@ -36,6 +36,7 @@
             <ul class="nav navbar-nav">
                 <li><a href="##">首页</a></li>
                 <li class="active"><a href="##">预约挂号</a></li>
+                <li><a href="foreground/person.jsp">个人中心</a></li>
             </ul>
             <c:if test="${patient!=null}">
                 <p class="navbar-text navbar-right"><a href="foreground/login.jsp" class="navbar-link">注销 </a> </p>

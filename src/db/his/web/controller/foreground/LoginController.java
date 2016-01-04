@@ -5,6 +5,7 @@ import db.his.domain.Patient;
 import db.his.domain.User;
 import db.his.service.DoctorService;
 import db.his.service.PatientService;
+import db.his.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,6 +63,18 @@ public class LoginController {
             map.put("message", "error");
         }
         return map;
+    }
+
+    /**
+     * 注册病人
+     * @param patient
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/register")
+    public Map<String, Object> register(Patient patient){
+        patient.setId(WebUtils.makeId());
+        return patientService.add(patient);
     }
 
     /**

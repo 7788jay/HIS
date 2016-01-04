@@ -1,12 +1,15 @@
 package db.his.dao;
 
 import db.his.domain.Patient;
+import db.his.domain.dto.AppointmentDTO;
 import db.his.util.JdbcUtil;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.springframework.stereotype.Repository;
 
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by lwt on 2015/12/8.
@@ -14,6 +17,19 @@ import java.sql.SQLException;
 @Repository
 public class PatientDao {
     QueryRunner qr=new QueryRunner(JdbcUtil.getDataSources());
+
+    /**
+     * 查看病人预约列表
+     * @param patient_id
+     * @return
+     */
+    public List<AppointmentDTO> queryAppointment(String patient_id) throws SQLException {
+        String sql = "SELECT od.*,ap.id appoint_id, ap.appoint_time,ap.time,ap. WEEK,ap.priority,ap. STATUS\n" +
+                "FROM appointment ap\n" +
+                "LEFT JOIN outpatient_docter od ON ap.doctor_id = od.doctor_id\n" +
+                "WHERE ap.patient_id = ?;";
+        return (List<AppointmentDTO>) qr.query(sql,patient_id,new BeanListHandler(AppointmentDTO.class));
+    }
 
     /**
      * 根据用户名密码获取病人
