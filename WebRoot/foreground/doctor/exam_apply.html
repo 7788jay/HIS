@@ -18,7 +18,7 @@
     </style>
 </head>
 
-<body ms-controller="record" data-spy="scroll" data-target="#sidebarMenu">
+<body ms-controller="apply">
 <div class="container">
     <div class="row">
         <div class="navbar navbar-default navbar-static-top col-md-12" role="navigation">
@@ -28,7 +28,7 @@
             <ul class="nav navbar-nav">
                 <li><a href="javascript:void(0)">首页</a></li>
                 <li><a href="javascript:void(0)" ms-click="record">病历书写</a></li>
-                <li class="active"><a href="javascript:void(0)">开立处方</a></li>
+                <li class="active"><a href="patient_record.html">开立处方</a></li>
                 <li><a href="javascript:void(0)" ms-click="order">开立医嘱</a></li>
                 <li><a href="preview.html">记录预览</a></li>
             </ul>
@@ -39,14 +39,14 @@
     <div class="row">
         <div class="panel panel-default">
             <!-- Default panel contents -->
-            <div class="panel-heading"><h3 class="text-center">开立处方</h3></div>
+            <div class="panel-heading"><h3 class="text-center">检查申请</h3></div>
             <!-- Table -->
             <table class="table">
                 <tr>
                     <td colspan="4" class="text-right">
                         <a class="btn btn-warning" ms-click="updatePriority">延后诊断</a>
                         <a class="btn btn-success" ms-click="updateStatus">结束诊断</a>
-                        <a class="btn btn-info" ms-click="save">保存处方</a>
+                        <a class="btn btn-info" ms-click="save">提交申请</a>
                     </td>
                 </tr>
                 <tr>
@@ -62,64 +62,30 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="text-right">药品: </td>
-                    <td colspan="3">
-                        <form class="form-horizontal">
-                            <div class="form-group">
-                                <div class="col-sm-2">
-                                    <select class="form-control" name="drug">
-                                        <option value="0">请选择</option>
-                                        <option ms-repeat="drug">{{el.name}}</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-1">
-                                    <input type="text" class="form-control" placeholder="数量" ms-duplex-number="amount">
-                                </div>
-                                <div class="col-sm-2">
-                                    <select class="form-control" ms-duplex="unit">
-                                        <option>盒</option>
-                                        <option>mg</option>
-                                        <option>瓶</option>
-                                    </select>
-                                </div>
-                                <a class="btn btn-info" ms-click="add">添加</a>
-                            </div>
-                        </form>
+                    <td class="text-right">申请部门: </td>
+                    <td colspan="1">
+                        <select class="form-control" ms-duplex="dept_name">
+                            <option>请选择</option>
+                            <option>内科</option>
+                            <option>儿科</option>
+                            <option>妇科</option>
+                            <option>泌尿外科</option>
+                            <option>神经科/option>
+                        </select>
                     </td>
                 </tr>
                 <tr>
-                    <td class="text-right">已选择的药品：</td>
-                    <td colspan="2">
-                        <div ms-repeat="selected">
-                            {{el.drug_name}}   {{el.amount}}  {{el.unit}}  <a ms-click="$remove" class="glyphicon glyphicon-remove"></a>
-                        </div>
+                    <td class="text-right">检查类型: </td>
+                    <td colspan="1">
+                        <select class="form-control" ms-duplex="exam_type">
+                            <option>请选择</option>
+                            <option>B超</option>
+                            <option>血液检查</option>
+                            <option>核磁共振</option>
+                            <option>X光</option>
+                            <option>心电图</option>
+                        </select>
                     </td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class="text-right">病症:</td>
-                    <td colspan="2">
-                        <textarea class="form-control" ms-duplex="comment"></textarea>
-                    </td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class="text-right">保存的处方:</td>
-                    <td colspan="2">
-                        <table class="table">
-                            <tr>
-                                <td>药品名</td>
-                                <td>药品数量</td>
-                                <td>药品单位</td>
-                            </tr>
-                            <tr ms-repeat="data">
-                                <td>{{el.drug_name}}</td>
-                                <td>{{el.amount}}</td>
-                                <td>{{el.unit}}</td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td></td>
                 </tr>
             </table>
         </div>
@@ -130,19 +96,15 @@
 <script type="text/javascript">
     avalon.ready(function () {
         var vm = avalon.define({
-            $id: "record",
+            $id: "apply",
             userName: "",
             patient_id: "",
             priority: "",
-            amount: 1,
-            unit: "盒",
-            data:[],       //处方数据
+            dept_name: "请选择",
+            exam_type: "请选择",
             patient: {},   //病人信息
             appointment_id: "",//挂号编号
             drug:[],     //药品信息
-            selected: [],   //已选择的药品
-            drugName: "",
-            comment: "",   //病症
             //获取用户
             init: function(){
                 $.ajax({
@@ -163,41 +125,7 @@
                         vm.patient = data;
                     }
                 });
-                $.ajax({
-                    url: "/HIS/fore/recipe/queryDrug",
-                    type: "GET",
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        vm.drug = data;
-                    }
-                });
-            },
-            //添加药品
-            add: function(){
-                var code = $('select[name="drug"]').val();
-                var name = $('select[name="drug"]').find("option:selected").text();
-                if(code==0){
-                    layer.msg("请选择药品！");
-                    return;
-                }
-                if(vm.amount==0){
-                    layer.msg("请填写数量！");
-                    return;
-                }
-                vm.selected.push({'drug_code':code,'drug_name':name,'amount':vm.amount,'unit':vm.unit});
-                $('select[name="drug"]').val(0);
-            },
-            //查询
-            query: function () {
-                $.ajax({
-                    url: "/HIS/fore/recipe/queryOne?patient_id="+vm.patient_id+"&appointment_id="+vm.appointment_id,
-                    type: "GET",
-                    dataType: "json",
-                    success: function (data) {
-                        vm.data = data;
-                    }
-                })
+
             },
             //结束诊断
             updateStatus: function(){
@@ -231,17 +159,21 @@
             },
             //保存
             save: function(){
-                var params = "patient_id="+vm.patient_id+"&comment="+vm.comment+"&appointment_id="+vm.appointment_id;
+                if(vm.dept_name=="请选择"){
+                    layer.msg("请选择部门！");
+                    return;
+                }
+                if(vm.exam_type=="请选择"){
+                    layer.msg("请选择检查类型！");
+                    return;
+                }
                 $.ajax({
-                    url: "/HIS/fore/recipe/insert?"+params,
+                    url: "/HIS/fore/apply/add",
                     type: "POST",
-                    contentType:"application/json",
-                    data: JSON.stringify(vm.selected),
+                    data: {"patient_id":vm.patient_id,"dept_name":vm.dept_name,"exam_type":vm.exam_type},
                     dataType: "json",
                     success: function (data) {
                         layer.alert(data.message);
-                        vm.query();
-                        vm.selected = [];
                     }
                 })
             },

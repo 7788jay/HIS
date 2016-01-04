@@ -58,7 +58,7 @@
                 <tr>
                     <td class="text-right">主诉: </td>
                     <td colspan="3">
-                        <input class="form-control" ms-attr-value="{{patient.complained}}"/>
+                        {{patient.complained}}
                     </td>
                 </tr>
                 <tr>
@@ -72,6 +72,29 @@
                         </div>
                     </td>
                 </tr>
+                <!--申请检查-->
+                <tr>
+                    <td colspan="4">
+                        <div class="panel panel-default">
+                            <!-- Default panel contents -->
+                            <div class="panel-heading"><h6 class="text-center">申请检查</h6></div>
+                            <!-- Table -->
+                            <table class="table">
+                                <tr>
+                                    <td>科室名</td>
+                                    <td>检查类型</td>
+                                    <td>申请时间</td>
+                                </tr>
+                                <tr ms-repeat="apply_data">
+                                    <td>{{el.dept_name}}</td>
+                                    <td>{{el.exam_type}}</td>
+                                    <td>{{el.apply_time|date}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+                <!--处方-->
                 <tr>
                     <td colspan="4">
                         <div class="panel panel-default">
@@ -134,6 +157,7 @@
             order_data:[],            //医嘱数据
             recipe_data:[],            //处方数据
             record_data: [],          //病历信息
+            apply_data: [],          //申请信息
             patient: {},        //病人信息
             appointment_id: "", //挂号编号
             //获取用户
@@ -185,6 +209,15 @@
                     dataType: "json",
                     success: function (data) {
                         vm.recipe_data = data;
+                    }
+                });
+                 //申请
+                $.ajax({
+                    url: "/HIS/fore/apply/getAll?patient_id="+vm.patient_id,
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        vm.apply_data = data;
                     }
                 })
             },
